@@ -49,7 +49,7 @@ public class Meeting extends ParseObject {
         saveInBackground();
     }
 
-    public void uninviteUser(ParseUser attendee){
+    public void uninviteUser(ParseUser attendee) {
         getAttendees().remove(attendee);
         saveInBackground();
     }
