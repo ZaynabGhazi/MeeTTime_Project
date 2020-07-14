@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_timeline"
+        android:icon="@drawable/timeline_icon"
+        android:iconTint="@color/colorPrimaryDark"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_launch"
+        android:icon="@drawable/add_icon"
+        android:iconTint="@color/colorPrimaryDark"
+        android:title="Launch"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_calendar"
+        android:icon="@drawable/calendar_icon"
+        android:iconTint="@color/colorPrimaryDark"
+        android:title="Calendar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_profile"
+        android:icon="@drawable/profile_icon"
+        android:iconTint="@color/colorPrimaryDark"
+        android:title="Profile"
+        app:showAsAction="always" />
+</menu>
