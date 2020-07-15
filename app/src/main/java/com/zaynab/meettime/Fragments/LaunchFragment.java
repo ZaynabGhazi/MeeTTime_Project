@@ -200,7 +200,7 @@ public class LaunchFragment extends Fragment {
             @Override
             public void done(ParseException e) {
                 //redirect
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new Fragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new TimelineFragment()).commit();
             }
         });
     }

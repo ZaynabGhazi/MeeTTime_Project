@@ -20,6 +20,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.zaynab.meettime.Fragments.EditProfileFragment;
 import com.zaynab.meettime.Fragments.LaunchFragment;
 import com.zaynab.meettime.Fragments.ProfileFragment;
 import com.zaynab.meettime.Fragments.TimelineFragment;
@@ -51,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         ImageView ivDrawer = hView.findViewById(R.id.drawerImage);
         ParseUser current = ParseUser.getCurrentUser();
         current.fetchInBackground();
-        String test = current.getString("firstName");
         ParseFile profile_image = current.getParseFile("profilePicture");
         if (profile_image != null)
             Glide.with(this.getApplicationContext()).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(ivDrawer);
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.editProfile:
-                        Toast.makeText(MainActivity.this, "Edit Profile", Toast.LENGTH_SHORT).show();
+                        mFragmentManager.beginTransaction().replace(R.id.flContainer, new EditProfileFragment()).commit();
                         break;
                     case R.id.settings:
                         Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
