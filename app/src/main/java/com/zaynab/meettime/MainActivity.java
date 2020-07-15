@@ -10,11 +10,12 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.zaynab.meettime.Fragments.LaunchFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mBottomNavigationView;
-    final FragmentManager fragmentManager = getSupportFragmentManager();
+    final FragmentManager mFragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                         fragment = new Fragment();
                         break;
                     case R.id.action_launch:
-                        fragment = new Fragment();
+                        fragment = new LaunchFragment();
                         Toast.makeText(MainActivity.this, "Launch!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_profile:
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Timeline!", Toast.LENGTH_SHORT).show();
                         break;
                 }
-                fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 return true;
             }
         });
