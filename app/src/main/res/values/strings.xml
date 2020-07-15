@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">meeTTime</string>
+    <string name="Open">open</string>
+    <string name="Close">close</string>
 </resources>
