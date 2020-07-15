@@ -16,14 +16,21 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.zaynab.meettime.R;
+import com.zaynab.meettime.models.Meeting;
+import com.zaynab.meettime.models.Post;
 
 import org.w3c.dom.Text;
 
@@ -76,6 +83,7 @@ public class LaunchFragment extends Fragment {
         mContext = view.getContext();
         bindView(view);
         setDateTimePickers();
+        launchMeeting();
     }
 
 
@@ -140,7 +148,7 @@ public class LaunchFragment extends Fragment {
             @SuppressLint("RestrictedApi")
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                et.setText(i2 + "/" + i1 + "/" + i1);
+                et.setText(Integer.toString(i1 + 1) + "/" + i2 + "/" + i);
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -153,6 +161,48 @@ public class LaunchFragment extends Fragment {
         mDay = getInstance().get(DAY_OF_MONTH);
         mHour = getInstance().get(HOUR_OF_DAY);
         mMinute = getInstance().get(MINUTE);
+    }
+
+    private void launchMeeting() {
+        mBtnLaunch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Meeting meeting = new Meeting();
+                meeting.setTitle(mEtTitle.getText().toString());
+                meeting.setChair(ParseUser.getCurrentUser());
+                meeting.setDescription(mEtDescription.getText().toString());
+                //DateTime format: mm/dd/yyyy hh:mm
+                String timeStart = mEtDateStart.getText().toString() + " " + mEtTimeStart.getText().toString();
+                String timeEnd = mEtDateEnd.getText().toString() + " " + mEtTimeEnd.getText().toString();
+                meeting.setTimeStart(timeStart);
+                meeting.setTimeEnd(timeEnd);
+                //implement all other features
+                meeting.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Toast.makeText(mContext, "Error while launching meeting!", Toast.LENGTH_SHORT).show();
+                        }
+                        Toast.makeText(mContext, "Meeting launched successfully!", Toast.LENGTH_SHORT).show();
+                        makePost(meeting);
+                    }
+                });
+            }
+        });
+    }
+
+    private void makePost(Meeting meeting) {
+        Post post = new Post();
+        post.setOwner(ParseUser.getCurrentUser());
+        post.setMeeting(meeting);
+        post.setLaunched(true);
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                //redirect
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new Fragment()).commit();
+            }
+        });
     }
 
 }

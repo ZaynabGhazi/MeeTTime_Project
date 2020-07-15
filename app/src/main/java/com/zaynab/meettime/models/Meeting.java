@@ -1,7 +1,10 @@
 package com.zaynab.meettime.models;
 
+import android.util.Log;
+
 import com.parse.Parse;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseRelation;
@@ -12,15 +15,19 @@ import java.util.Date;
 @ParseClassName("Meeting")
 public class Meeting extends ParseObject {
 
-    public Meeting() {
-        super();
-    }
-
     public String getTitle() {
-        return getString("title");
+        String title = "";
+        try {
+            title = fetchIfNeeded().getString("title");
+
+        } catch (ParseException e) {
+            Log.v("MEETING", e.toString());
+            e.printStackTrace();
+        }
+        return title;
     }
 
-    public void SetTitle(String title) {
+    public void setTitle(String title) {
         put("title", title);
     }
 
@@ -54,12 +61,20 @@ public class Meeting extends ParseObject {
         saveInBackground();
     }
 
-    public Date getTime() {
-        return getDate("meetingTime");
+    public String getTimeStart() {
+        return getString("timeStart");
     }
 
-    public void setTime(Date time) {
-        put("meetingTime", time);
+    public void setTimeStart(String time) {
+        put("timeStart", time);
+    }
+
+    public String getTimeEnd() {
+        return getString("timeEnd");
+    }
+
+    public void setTimeEnd(String time) {
+        put("timeEnd", time);
     }
 
     public ParseGeoPoint getLocation() {
@@ -104,7 +119,7 @@ public class Meeting extends ParseObject {
      * meeting.isScheduled() -> The time of the meeting has been set.
      */
     public boolean isScheduled() {
-        return getTime() != null;
+        return getTimeStart() != null;
     }
 
 }

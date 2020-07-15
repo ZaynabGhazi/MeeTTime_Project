@@ -15,7 +15,7 @@ public class Post extends ParseObject {
     }
 
     public ParseUser getOwner() {
-        return getOwner();
+        return getParseUser("owner");
     }
 
     public void setOwner(ParseUser usr) {
@@ -23,7 +23,7 @@ public class Post extends ParseObject {
     }
 
     public Meeting getMeeting() {
-        return getMeeting();
+        return ((Meeting) getParseObject("meeting"));
     }
 
     public void setMeeting(Meeting meeting) {
