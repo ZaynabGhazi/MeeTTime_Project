@@ -2,6 +2,7 @@ package com.zaynab.meettime.utilities;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.zaynab.meettime.Fragments.JoinDialogFragment;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Post;
 
@@ -84,6 +89,31 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ParseFile bg_image = post.getMeeting().getParseFile("bgPicture");
             if (bg_image != null)
                 Glide.with(mContext).load(bg_image.getUrl()).into(mIvBackground);
+            if (post.getOwner().getUsername().equals(ParseUser.getCurrentUser().getUsername()))
+                mBtnJoin.setVisibility(View.GONE);
+            else setupJoin();
+        }
+
+        private void setupJoin() {
+            mBtnJoin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle b = new Bundle();
+                    b.putSerializable("MEETING", mPosts.get(getAdapterPosition()).getMeeting());
+                    JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
+                    joinDialogFragment.setArguments(b);
+                    //((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, joinDialogFragment).commit();
+
+                    FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
+                    Fragment prev = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
+                    if (prev != null) {
+                        ft.remove(prev);
+                    }
+                    ft.addToBackStack(null);
+                    //JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
+                    joinDialogFragment.show(ft, "dialog");
+                }
+            });
         }
 
         @Override

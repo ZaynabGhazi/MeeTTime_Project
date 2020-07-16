@@ -10,10 +10,11 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @ParseClassName("Meeting")
-public class Meeting extends ParseObject {
+public class Meeting extends ParseObject implements Serializable {
 
     public String getTitle() {
         String title = "";
@@ -122,4 +123,17 @@ public class Meeting extends ParseObject {
         return getTimeStart() != null;
     }
 
+    public ParseRelation<UserTime> getAttendanceData() {
+        return getRelation("attendanceData");
+    }
+
+    public void addAttendanceData(UserTime attendance) {
+        getAttendanceData().add(attendance);
+        saveInBackground();
+    }
+
+    public void removeAttendanceData(UserTime attendance) {
+        getAttendanceData().remove(attendance);
+        saveInBackground();
+    }
 }

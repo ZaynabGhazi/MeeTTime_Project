@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <TextView
+        android:id="@+id/tvMeetingInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        tools:text="This meeting is scheduled to occur between date1 and date2. When will you be able to join?" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etDateStartLayout"
+            android:layout_width="wrap_content"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDateStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto"
+                android:hint="start date"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etTimeStartLayout"
+            android:layout_width="wrap_content"
+            android:layout_weight="1.5"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTimeStart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto"
+                android:hint="start time"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etDateEndLayout"
+            android:layout_weight="1.5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDateEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto"
+                android:hint="end date"
+                android:inputType="time"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etTimeEndLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:fontFamily="@font/roboto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTimeEnd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto"
+                android:hint="end time"
+                android:inputType="time"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConfirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:text="Confirm" />
+
+</LinearLayout>

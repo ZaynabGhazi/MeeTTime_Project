@@ -9,6 +9,7 @@ import com.parse.ParseObject;
 import com.zaynab.meettime.models.Comment;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
+import com.zaynab.meettime.models.UserTime;
 
 public class ParseApplication extends Application {
     @Override
@@ -18,6 +19,8 @@ public class ParseApplication extends Application {
         ParseObject.registerSubclass(Meeting.class);
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Comment.class);
+        ParseObject.registerSubclass(UserTime.class);
+
 
         //setup parse server
         Parse.initialize(new Parse.Configuration.Builder(this)
