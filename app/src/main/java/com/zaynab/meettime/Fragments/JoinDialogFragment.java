@@ -13,7 +13,6 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
@@ -54,7 +53,6 @@ public class JoinDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_join, container, false);
@@ -93,7 +91,6 @@ public class JoinDialogFragment extends DialogFragment {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setDateTimePickers() {
         initializeCalendar();
         mEtStartDate.setOnClickListener(new View.OnClickListener() {
@@ -132,19 +129,16 @@ public class JoinDialogFragment extends DialogFragment {
         timePickerDialog.show();
     }
 
-    @SuppressLint("NewApi")
     private void showDateDialog(final TextInputEditText et) {
         @SuppressLint("RestrictedApi") MaterialStyledDatePickerDialog datePickerDialog = new MaterialStyledDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @SuppressLint("RestrictedApi")
             @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                et.setText(Integer.toString(i1 + 1) + "/" + i2 + "/" + i);
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                et.setText(Integer.toString(month + 1) + "/" + day + "/" + year);
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initializeCalendar() {
         mYear = getInstance().get(YEAR);
         mMonth = getInstance().get(MONTH);
@@ -154,7 +148,7 @@ public class JoinDialogFragment extends DialogFragment {
     }
 
     private void setupConfirm() {
-
+        //TBD
     }
 
 }

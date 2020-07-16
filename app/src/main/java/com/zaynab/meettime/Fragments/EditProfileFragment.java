@@ -10,7 +10,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +77,6 @@ public class EditProfileFragment extends Fragment {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mContext = view.getContext();
@@ -85,6 +86,23 @@ public class EditProfileFragment extends Fragment {
         setDateTimePickers();
         showCurrentData();
         onSaveChanges();
+        setupEditPicture();
+    }
+
+    private void setupEditPicture() {
+        mIvProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditProfilePictureFragment editProfilePictureFragment = new EditProfilePictureFragment();
+                FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
+                Fragment prev = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
+                if (prev != null) {
+                    ft.remove(prev);
+                }
+                ft.addToBackStack(null);
+                editProfilePictureFragment.show(ft, "dialog");
+            }
+        });
     }
 
 
@@ -148,19 +166,17 @@ public class EditProfileFragment extends Fragment {
         timePickerDialog.show();
     }
 
-    @SuppressLint("NewApi")
     private void showDateDialog(final TextInputEditText et) {
         @SuppressLint("RestrictedApi") MaterialStyledDatePickerDialog datePickerDialog = new MaterialStyledDatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @SuppressLint("RestrictedApi")
             @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                et.setText(Integer.toString(i1 + 1) + "/" + i2 + "/" + i);
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                et.setText(Integer.toString(month + 1) + "/" + day + "/" + year);
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.show();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initializeCalendar() {
         mYear = getInstance().get(YEAR);
         mMonth = getInstance().get(MONTH);

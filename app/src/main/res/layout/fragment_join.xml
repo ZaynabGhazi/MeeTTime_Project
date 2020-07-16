@@ -7,7 +7,7 @@
     android:padding="8dp">
 
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tvMeetingInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

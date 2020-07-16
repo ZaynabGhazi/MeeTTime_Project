@@ -102,15 +102,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                     b.putSerializable("MEETING", mPosts.get(getAdapterPosition()).getMeeting());
                     JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
                     joinDialogFragment.setArguments(b);
-                    //((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, joinDialogFragment).commit();
-
                     FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
                     Fragment prev = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
                     if (prev != null) {
                         ft.remove(prev);
                     }
                     ft.addToBackStack(null);
-                    //JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
                     joinDialogFragment.show(ft, "dialog");
                 }
             });

@@ -77,7 +77,6 @@ public class LaunchFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_launch, container, false);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         mContext = view.getContext();
@@ -103,7 +102,6 @@ public class LaunchFragment extends Fragment {
         mBtnLaunch = view.findViewById(R.id.btnLaunch);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void setDateTimePickers() {
         initializeCalendar();
         mEtDateStart.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +140,6 @@ public class LaunchFragment extends Fragment {
         timePickerDialog.show();
     }
 
-    @SuppressLint("NewApi")
     private void showDateDialog(final TextInputEditText et) {
         @SuppressLint("RestrictedApi") MaterialStyledDatePickerDialog datePickerDialog = new MaterialStyledDatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @SuppressLint("RestrictedApi")
@@ -154,7 +151,6 @@ public class LaunchFragment extends Fragment {
         datePickerDialog.show();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initializeCalendar() {
         mYear = getInstance().get(YEAR);
         mMonth = getInstance().get(MONTH);
