@@ -81,7 +81,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             }
             mTvCaption.setText(caption);
             mTvTitle.setText(post.getMeeting().getTitle());
-            mTvTimestamp.setText(TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
+            mTvTimestamp.setText((TimeFormatter.getTimeDifference(post.getCreatedAt().toString()).equals("Just now")) ? TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) : TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
             //correct heart icon:
             ParseFile profile_image = post.getOwner().getParseFile("profilePicture");
             if (profile_image != null)

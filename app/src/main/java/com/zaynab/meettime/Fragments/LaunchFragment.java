@@ -4,7 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
+import android.graphics.drawable.BitmapDrawable;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -13,19 +19,24 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.meettime.R;
@@ -34,7 +45,12 @@ import com.zaynab.meettime.models.Post;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
+import static android.app.Activity.RESULT_OK;
 import static android.icu.util.Calendar.*;
+import static com.zaynab.meettime.Fragments.EditProfilePictureFragment.PICK_PHOTO_CODE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,6 +81,7 @@ public class LaunchFragment extends Fragment {
     private MaterialButton mBtnInvite;
     private SwitchMaterial mBtnPrivate;
     private MaterialButton mBtnLaunch;
+    private ImageView mIvBackground;
 
 
     public LaunchFragment() {
@@ -83,7 +100,9 @@ public class LaunchFragment extends Fragment {
         bindView(view);
         setDateTimePickers();
         launchMeeting();
+        addBackgroundPhoto();
     }
+
 
 
     private void bindView(View view) {
@@ -100,6 +119,7 @@ public class LaunchFragment extends Fragment {
         mBtnInvite = view.findViewById(R.id.btnInviteFriends);
         mBtnPrivate = view.findViewById(R.id.btnPrivate);
         mBtnLaunch = view.findViewById(R.id.btnLaunch);
+        mIvBackground = view.findViewById(R.id.ivBackground);
     }
 
     private void setDateTimePickers() {
@@ -172,6 +192,15 @@ public class LaunchFragment extends Fragment {
                 String timeEnd = mEtDateEnd.getText().toString() + " " + mEtTimeEnd.getText().toString();
                 meeting.setTimeStart(timeStart);
                 meeting.setTimeEnd(timeEnd);
+                //save background picture
+                final BitmapDrawable drawable = (BitmapDrawable) mIvBackground.getDrawable();
+                if (drawable != null) {
+                    Bitmap image = drawable.getBitmap();
+                    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                    ParseFile pictureFile = new ParseFile(outStream.toByteArray());
+                    meeting.put("bgPicture", pictureFile);
+                }
                 //implement all other features
                 meeting.saveInBackground(new SaveCallback() {
                     @Override
@@ -200,5 +229,50 @@ public class LaunchFragment extends Fragment {
             }
         });
     }
+
+    private void addBackgroundPhoto() {
+        mIvBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPickPhoto(view);
+            }
+        });
+    }
+
+    private void onPickPhoto(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivityForResult(intent, PICK_PHOTO_CODE);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+            Uri photoUri = data.getData();
+            Bitmap selectedImage = loadFromUri(photoUri);
+            if (selectedImage != null)
+                Glide.with(getContext()).load(photoUri).centerCrop().into(mIvBackground);
+        } else { // Result was a failure
+            Toast.makeText(getContext(), "Picture wasn't chosen!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            if (Build.VERSION.SDK_INT > 27) {
+                ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
 
 }

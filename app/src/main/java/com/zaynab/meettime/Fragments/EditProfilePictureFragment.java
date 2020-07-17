@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
@@ -26,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 import com.zaynab.meettime.R;
-import com.zaynab.meettime.models.Meeting;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +37,8 @@ public class EditProfilePictureFragment extends DialogFragment {
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 40;
     public final static int PICK_PHOTO_CODE = 1046;
 
-    private File photoFile;
-    private String photoFileName = "photo.jpg";
+    private File mPhotoFile;
+    private String mPhotoFileName = "photo.jpg";
 
 
     private MaterialButton mBtnTakePhoto;
@@ -86,8 +84,8 @@ public class EditProfilePictureFragment extends DialogFragment {
 
     private void launchCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoFile = getPhotoFileUri(photoFileName);
-        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.meeTTime", photoFile);
+        mPhotoFile = getPhotoFileUri(mPhotoFileName);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider.meeTTime", mPhotoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
@@ -117,9 +115,9 @@ public class EditProfilePictureFragment extends DialogFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                Bitmap takenImage = BitmapFactory.decodeFile(mPhotoFile.getAbsolutePath());
                 if (takenImage != null)
-                    Glide.with(getContext()).load(photoFile).apply(RequestOptions.circleCropTransform()).into((ImageView) getActivity().findViewById(R.id.ivProfileImage));
+                    Glide.with(getContext()).load(mPhotoFile).apply(RequestOptions.circleCropTransform()).into((ImageView) getActivity().findViewById(R.id.ivProfileImage));
             }
         } else if ((data != null) && requestCode == PICK_PHOTO_CODE) {
             Uri photoUri = data.getData();
@@ -127,7 +125,7 @@ public class EditProfilePictureFragment extends DialogFragment {
             if (selectedImage != null)
                 Glide.with(getContext()).load(photoUri).apply(RequestOptions.circleCropTransform()).into((ImageView) getActivity().findViewById(R.id.ivProfileImage));
         } else { // Result was a failure
-            Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Picture wasn't chosen!", Toast.LENGTH_SHORT).show();
         }
     }
 

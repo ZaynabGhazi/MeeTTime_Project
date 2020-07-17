@@ -15,6 +15,15 @@
         android:padding="8dp"
         tools:context=".Fragments.LaunchFragment">
 
+        <ImageView
+            android:id="@+id/ivBackground"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scaleType="fitCenter"
+            android:backgroundTint="#FFFFFF"
+            app:srcCompat="@drawable/add_photo_icon"
+            tools:srcCompat="@drawable/add_photo_icon" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etTitleLayout"
             android:layout_width="match_parent"
@@ -70,11 +79,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDateStart"
-                    android:focusableInTouchMode="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="start date"
                     android:visibility="visible" />
@@ -88,11 +97,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTimeStart"
-                    android:focusableInTouchMode="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="start time"
                     android:visibility="visible" />
@@ -112,11 +121,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etDateEnd"
-                    android:focusableInTouchMode="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="end date"
                     android:inputType="time"
@@ -131,11 +140,11 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTimeEnd"
-                    android:focusableInTouchMode="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
+                    android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="end time"
                     android:inputType="time"
