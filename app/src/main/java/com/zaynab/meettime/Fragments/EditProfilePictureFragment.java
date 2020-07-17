@@ -124,7 +124,6 @@ public class EditProfilePictureFragment extends DialogFragment {
         } else if ((data != null) && requestCode == PICK_PHOTO_CODE) {
             Uri photoUri = data.getData();
             Bitmap selectedImage = loadFromUri(photoUri);
-            photoFile = new File(photoUri.getPath());
             if (selectedImage != null)
                 Glide.with(getContext()).load(photoUri).apply(RequestOptions.circleCropTransform()).into((ImageView) getActivity().findViewById(R.id.ivProfileImage));
         } else { // Result was a failure

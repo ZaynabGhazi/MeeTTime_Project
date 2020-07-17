@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
+        app:icon="@drawable/select_gallery_icon_24"
         android:text="Select from Gallery" />
 
     <com.google.android.material.button.MaterialButton
@@ -20,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto"
+        app:icon="@drawable/camera_icon_24"
         android:text="Take Photo" />
 
 </LinearLayout>

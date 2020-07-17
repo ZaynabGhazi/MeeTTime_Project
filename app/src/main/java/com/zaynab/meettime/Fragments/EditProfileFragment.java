@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,14 +26,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.textfield.TextInputEditText;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.zaynab.meettime.MainActivity;
 import com.zaynab.meettime.R;
+
+import java.io.ByteArrayOutputStream;
 
 import static android.icu.util.Calendar.DAY_OF_MONTH;
 import static android.icu.util.Calendar.HOUR_OF_DAY;
@@ -214,6 +221,13 @@ public class EditProfileFragment extends Fragment {
                 mUsr.put("lastName", mEtLastName.getText().toString());
                 mUsr.put("startAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
                 mUsr.put("endAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
+                //save profile picture
+                final BitmapDrawable drawable = (BitmapDrawable) mIvProfileImage.getDrawable();
+                Bitmap image = drawable.getBitmap();
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                ParseFile pictureFile = new ParseFile(outStream.toByteArray());
+                mUsr.put("profilePicture", pictureFile);
                 mUsr.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -223,7 +237,11 @@ public class EditProfileFragment extends Fragment {
                         }
                         Toast.makeText(mContext, "Error updating profile!", Toast.LENGTH_SHORT);
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ProfileFragment()).commit();
-
+                        //update bottom navigation bar
+                        ((BottomNavigationView) getActivity().findViewById(R.id.bottomNavigationView)).setSelectedItemId(R.id.action_profile);
+                        //update Navigation Drawer instantly
+                        if (drawable != null)
+                            Glide.with(mContext).load(drawable).apply(RequestOptions.circleCropTransform()).into(((ImageView) getActivity().findViewById(R.id.drawerImage)));
                     }
                 });
             }
