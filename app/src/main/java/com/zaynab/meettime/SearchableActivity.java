@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.zaynab.meettime.models.Post;
@@ -69,11 +70,19 @@ public class SearchableActivity extends AppCompatActivity {
     }
 
     protected void queryUsers(String name) {
-        ParseQuery<ParseUser> query = ParseQuery.getQuery(ParseUser.class);
-        query.whereEqualTo("username", name);
-        //query.whereEqualTo("firstName",name);
-        //query.whereEqualTo("lastName",name);
-        query.findInBackground(new FindCallback<ParseUser>() {
+        ParseQuery<ParseUser> queryUserName = ParseQuery.getQuery(ParseUser.class);
+        queryUserName.whereContains("username", name);
+        ParseQuery<ParseUser> queryFirstName = ParseQuery.getQuery(ParseUser.class);
+        queryFirstName.whereContains("firstName", name);
+        ParseQuery<ParseUser> queryLastName = ParseQuery.getQuery(ParseUser.class);
+        queryLastName.whereContains("lastName", name);
+        //make compound query:
+        List<ParseQuery<ParseUser>> queries = new ArrayList<ParseQuery<ParseUser>>();
+        queries.add(queryUserName);
+        queries.add(queryFirstName);
+        queries.add(queryLastName);
+        ParseQuery<ParseUser> mainQuery = ParseQuery.or(queries);
+        mainQuery.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> users, ParseException e) {
                 if (e != null) {
