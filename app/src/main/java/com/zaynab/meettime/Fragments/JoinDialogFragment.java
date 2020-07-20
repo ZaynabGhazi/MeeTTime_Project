@@ -14,33 +14,24 @@ import android.widget.TimePicker;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.textfield.TextInputEditText;
-import com.parse.ParseUser;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 
-import static android.icu.util.Calendar.DAY_OF_MONTH;
 import static android.icu.util.Calendar.HOUR_OF_DAY;
 import static android.icu.util.Calendar.MINUTE;
-import static android.icu.util.Calendar.MONTH;
-import static android.icu.util.Calendar.YEAR;
 import static android.icu.util.Calendar.getInstance;
 
 
 public class JoinDialogFragment extends DialogFragment {
+    public static final int TIME = 1;
+    public static final int DAY = 0;
 
     public static final String TAG = "JOIN_DIALOG_FRAGMENT";
     private TextView mTvMeetingInfo;
-    private TextInputEditText mEtStartDate;
-    private TextInputEditText mEtEndDate;
     private TextInputEditText mEtStartTime;
     private TextInputEditText mEtEndTime;
     private MaterialButton mBtnConfirm;
-
-    private int mYear;
-    private int mMonth;
-    private int mDay;
     private int mHour;
     private int mMinute;
 
@@ -56,7 +47,7 @@ public class JoinDialogFragment extends DialogFragment {
         Meeting meeting = (Meeting) b.getSerializable("MEETING");
         bindView(v);
         initializeDefaultData(meeting);
-        setDateTimePickers();
+        setTimePickers();
         setupConfirm();
         return v;
     }
@@ -64,33 +55,20 @@ public class JoinDialogFragment extends DialogFragment {
 
     private void bindView(View v) {
         mTvMeetingInfo = v.findViewById(R.id.tvMeetingInfo);
-        mEtStartDate = v.findViewById(R.id.etMonStart);
-        mEtEndDate = v.findViewById(R.id.etDateEnd);
+
         mEtStartTime = v.findViewById(R.id.etMonEnd);
         mEtEndTime = v.findViewById(R.id.etTimeEnd);
     }
 
     private void initializeDefaultData(Meeting meeting) {
-        String meetingInfo = "This meeting is scheduled to occur some time between " + meeting.getTimeStart() + " and " + meeting.getTimeEnd() + ".\nWhen would you be able to join?";
+        String meetingInfo = "This meeting is scheduled to occur some time between " + meeting.getTimeStart().split(" ")[TIME] + " and " + meeting.getTimeEnd().split(" ")[TIME] + ", on " + meeting.getTimeEnd().split(" ")[DAY] + ".\nWhen would you be able to join?";
         mTvMeetingInfo.setText(meetingInfo);
 
 
     }
 
-    private void setDateTimePickers() {
+    private void setTimePickers() {
         initializeCalendar();
-        mEtStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateDialog(mEtStartDate);
-            }
-        });
-        mEtEndDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateDialog(mEtEndDate);
-            }
-        });
         mEtStartTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,26 +93,14 @@ public class JoinDialogFragment extends DialogFragment {
         timePickerDialog.show();
     }
 
-    private void showDateDialog(final TextInputEditText et) {
-        @SuppressLint("RestrictedApi") MaterialStyledDatePickerDialog datePickerDialog = new MaterialStyledDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                et.setText(Integer.toString(month + 1) + "/" + day + "/" + year);
-            }
-        }, mYear, mMonth, mDay);
-        datePickerDialog.show();
-    }
 
     private void initializeCalendar() {
-        mYear = getInstance().get(YEAR);
-        mMonth = getInstance().get(MONTH);
-        mDay = getInstance().get(DAY_OF_MONTH);
         mHour = getInstance().get(HOUR_OF_DAY);
         mMinute = getInstance().get(MINUTE);
     }
 
     private void setupConfirm() {
-        //TBD
+        //TODO: Algorithm linking + new view tbc
     }
 
 }
