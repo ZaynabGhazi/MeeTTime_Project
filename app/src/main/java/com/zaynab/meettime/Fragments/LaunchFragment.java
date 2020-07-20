@@ -64,8 +64,7 @@ public class LaunchFragment extends Fragment {
     private TextInputEditText mEtTitle;
     private SwitchMaterial mBtnInperson;
     private SwitchMaterial mBtnTime;
-    private TextInputEditText mEtDateStart;
-    private TextInputEditText mEtDateEnd;
+    private TextInputEditText mEtDate;
     private TextInputEditText mEtTimeStart;
     private TextInputEditText mEtTimeEnd;
     private TextInputEditText mEtLocation;
@@ -97,14 +96,12 @@ public class LaunchFragment extends Fragment {
     }
 
 
-
     private void bindView(View view) {
         mEtTitle = view.findViewById(R.id.etTitle);
         mBtnInperson = view.findViewById(R.id.btnInperson);
         mBtnTime = view.findViewById(R.id.btnTime);
-        mEtDateStart = view.findViewById(R.id.etMonStart);
-        mEtDateEnd = view.findViewById(R.id.etDateEnd);
-        mEtTimeStart = view.findViewById(R.id.etMonEnd);
+        mEtDate = view.findViewById(R.id.etDay);
+        mEtTimeStart = view.findViewById(R.id.etTimeStart);
         mEtTimeEnd = view.findViewById(R.id.etTimeEnd);
         mEtLocation = view.findViewById(R.id.etLocation);
         mBtnRemoteLink = view.findViewById(R.id.btnRemoteLink);
@@ -117,18 +114,13 @@ public class LaunchFragment extends Fragment {
 
     private void setDateTimePickers() {
         initializeCalendar();
-        mEtDateStart.setOnClickListener(new View.OnClickListener() {
+        mEtDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDateDialog(mEtDateStart);
+                showDateDialog(mEtDate);
             }
         });
-        mEtDateEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateDialog(mEtDateEnd);
-            }
-        });
+
         mEtTimeStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,8 +138,8 @@ public class LaunchFragment extends Fragment {
     private void showTimeDialog(final TextInputEditText et) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                et.setText(i + ":" + i1);
+            public void onTimeSet(TimePicker timePicker, int hour, int min) {
+                et.setText(hour + ":" + min);
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -157,8 +149,8 @@ public class LaunchFragment extends Fragment {
         @SuppressLint("RestrictedApi") MaterialStyledDatePickerDialog datePickerDialog = new MaterialStyledDatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
             @SuppressLint("RestrictedApi")
             @Override
-            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                et.setText(Integer.toString(i1 + 1) + "/" + i2 + "/" + i);
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                et.setText(Integer.toString(month + 1) + "/" + day + "/" + year);
             }
         }, mYear, mMonth, mDay);
         datePickerDialog.show();
@@ -181,8 +173,8 @@ public class LaunchFragment extends Fragment {
                 meeting.setChair(ParseUser.getCurrentUser());
                 meeting.setDescription(mEtDescription.getText().toString());
                 //DateTime format: mm/dd/yyyy hh:mm
-                String timeStart = mEtDateStart.getText().toString() + " " + mEtTimeStart.getText().toString();
-                String timeEnd = mEtDateEnd.getText().toString() + " " + mEtTimeEnd.getText().toString();
+                String timeStart = mEtDate.getText().toString() + " " + mEtTimeStart.getText().toString();
+                String timeEnd = mEtDate.getText().toString() + " " + mEtTimeEnd.getText().toString();
                 meeting.setTimeStart(timeStart);
                 meeting.setTimeEnd(timeEnd);
                 //save background picture

@@ -134,8 +134,6 @@ public class EditProfileFragment extends Fragment {
                 mUsr.setEmail(mEtEmail.getText().toString());
                 mUsr.put("firstName", mEtFirstName.getText().toString());
                 mUsr.put("lastName", mEtLastName.getText().toString());
-                // mUsr.put("startAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
-                // mUsr.put("endAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
                 //save profile picture
                 final BitmapDrawable drawable = (BitmapDrawable) mIvProfileImage.getDrawable();
                 Bitmap image = drawable.getBitmap();

@@ -66,37 +66,37 @@
                 tools:ignore="RtlCompat" />
         </LinearLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/etDayLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:ems="10"
+                android:focusableInTouchMode="false"
+                android:fontFamily="@font/roboto"
+                android:hint="select a day"
+                android:visibility="visible" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etDateStartLayout"
+                android:id="@+id/etTimeStartLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMonStart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:ems="10"
-                    android:focusableInTouchMode="false"
-                    android:fontFamily="@font/roboto"
-                    android:hint="start date"
-                    android:visibility="visible" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etTimeStartLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etMonEnd"
+                    android:id="@+id/etTimeStart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -106,48 +106,22 @@
                     android:hint="start time"
                     android:visibility="visible" />
             </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/etDateEndLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDateEnd"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:ems="10"
-                    android:focusableInTouchMode="false"
-                    android:fontFamily="@font/roboto"
-                    android:hint="end date"
-                    android:inputType="time"
-                    android:visibility="visible" />
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etTimeEndLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTimeEnd"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
                     android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="end time"
-                    android:inputType="time"
                     android:visibility="visible" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>

@@ -108,8 +108,8 @@ public class JoinDialogFragment extends DialogFragment {
     private void showTimeDialog(final TextInputEditText et) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                et.setText(i + ":" + i1);
+            public void onTimeSet(TimePicker timePicker, int hour, int min) {
+                et.setText(hour + ":" + min);
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
