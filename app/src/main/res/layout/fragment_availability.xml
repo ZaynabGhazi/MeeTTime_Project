@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_gradient"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:context=".Fragments.EditProfileFragment">
+
+        <TextView
+            android:id="@+id/tvHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:textColor="@android:color/white"
+            android:text="Edit your meeTTime availability:" />
+
+        <TextView
+            android:id="@+id/tvMon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="MON"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:typeface="normal" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etMonStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMonStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etMonEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etMonEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="TUE"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etTueStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTueStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etTueEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTueEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvWed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="WED"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etWedStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etWedStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etWedEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etWedEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvThu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="THU"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etThuStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etThuStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etThuEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etThuEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvFri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="FRI"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etFriStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFriStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etFriEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etFriEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="SAT"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etSatStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSatStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etSatEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSatEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="SUN"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etSunStartLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSunStart"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="start "
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/etSunEndLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSunEnd"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusableInTouchMode="false"
+                    android:fontFamily="@font/roboto"
+                    android:hint="end"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
+            android:text="Save changes" />
+
+
+    </LinearLayout>
+</ScrollView>

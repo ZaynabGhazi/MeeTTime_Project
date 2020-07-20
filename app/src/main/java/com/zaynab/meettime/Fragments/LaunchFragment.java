@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.BitmapDrawable;
 import android.icu.util.Calendar;
@@ -16,21 +15,18 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -43,12 +39,9 @@ import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
 
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import static android.app.Activity.RESULT_OK;
 import static android.icu.util.Calendar.*;
 import static com.zaynab.meettime.Fragments.EditProfilePictureFragment.PICK_PHOTO_CODE;
 
@@ -109,9 +102,9 @@ public class LaunchFragment extends Fragment {
         mEtTitle = view.findViewById(R.id.etTitle);
         mBtnInperson = view.findViewById(R.id.btnInperson);
         mBtnTime = view.findViewById(R.id.btnTime);
-        mEtDateStart = view.findViewById(R.id.etDateStart);
+        mEtDateStart = view.findViewById(R.id.etMonStart);
         mEtDateEnd = view.findViewById(R.id.etDateEnd);
-        mEtTimeStart = view.findViewById(R.id.etTimeStart);
+        mEtTimeStart = view.findViewById(R.id.etMonEnd);
         mEtTimeEnd = view.findViewById(R.id.etTimeEnd);
         mEtLocation = view.findViewById(R.id.etLocation);
         mBtnRemoteLink = view.findViewById(R.id.btnRemoteLink);

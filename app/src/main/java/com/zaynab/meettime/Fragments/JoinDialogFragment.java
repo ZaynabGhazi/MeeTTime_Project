@@ -3,9 +3,7 @@ package com.zaynab.meettime.Fragments;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseUser;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
-import com.zaynab.meettime.models.Post;
 
 import static android.icu.util.Calendar.DAY_OF_MONTH;
 import static android.icu.util.Calendar.HOUR_OF_DAY;
@@ -29,8 +26,7 @@ import static android.icu.util.Calendar.MINUTE;
 import static android.icu.util.Calendar.MONTH;
 import static android.icu.util.Calendar.YEAR;
 import static android.icu.util.Calendar.getInstance;
-import static com.zaynab.meettime.Fragments.EditProfileFragment.DATE;
-import static com.zaynab.meettime.Fragments.EditProfileFragment.TIME;
+
 
 public class JoinDialogFragment extends DialogFragment {
 
@@ -68,27 +64,17 @@ public class JoinDialogFragment extends DialogFragment {
 
     private void bindView(View v) {
         mTvMeetingInfo = v.findViewById(R.id.tvMeetingInfo);
-        mEtStartDate = v.findViewById(R.id.etDateStart);
+        mEtStartDate = v.findViewById(R.id.etMonStart);
         mEtEndDate = v.findViewById(R.id.etDateEnd);
-        mEtStartTime = v.findViewById(R.id.etTimeStart);
+        mEtStartTime = v.findViewById(R.id.etMonEnd);
         mEtEndTime = v.findViewById(R.id.etTimeEnd);
     }
 
     private void initializeDefaultData(Meeting meeting) {
         String meetingInfo = "This meeting is scheduled to occur some time between " + meeting.getTimeStart() + " and " + meeting.getTimeEnd() + ".\nWhen would you be able to join?";
         mTvMeetingInfo.setText(meetingInfo);
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        currentUser.fetchInBackground();
-        if (currentUser.getString("startAvailability") != null) {
-            String[] fields = currentUser.getString("startAvailability").split(" ");
-            mEtStartDate.setText(fields[DATE]);
-            mEtStartTime.setText(fields[TIME]);
-        }
-        if (currentUser.getString("endAvailability") != null) {
-            String[] fields = currentUser.getString("endAvailability").split(" ");
-            mEtEndDate.setText(fields[DATE]);
-            mEtEndTime.setText(fields[TIME]);
-        }
+
+
     }
 
     private void setDateTimePickers() {

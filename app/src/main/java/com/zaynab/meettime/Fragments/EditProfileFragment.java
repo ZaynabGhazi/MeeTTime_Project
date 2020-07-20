@@ -30,12 +30,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.textfield.TextInputEditText;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.zaynab.meettime.MainActivity;
 import com.zaynab.meettime.R;
 
 import java.io.ByteArrayOutputStream;
@@ -53,13 +51,6 @@ import static android.icu.util.Calendar.getInstance;
  */
 public class EditProfileFragment extends Fragment {
     public static final String TAG = "EDIT_PROFILE_FRAGMENT";
-    public static final int DATE = 0;
-    public static final int TIME = 1;
-    private int mYear;
-    private int mMonth;
-    private int mDay;
-    private int mHour;
-    private int mMinute;
     private ParseUser mUsr;
 
     private Context mContext;
@@ -68,10 +59,6 @@ public class EditProfileFragment extends Fragment {
     private TextInputEditText mEtLastName;
     private TextInputEditText mEtUsername;
     private TextInputEditText mEtEmail;
-    private TextInputEditText mEtStartDate;
-    private TextInputEditText mEtEndDate;
-    private TextInputEditText mEtStartTime;
-    private TextInputEditText mEtEndTime;
     private MaterialButton mBtnSave;
 
     public EditProfileFragment() {
@@ -90,7 +77,6 @@ public class EditProfileFragment extends Fragment {
         mUsr = ParseUser.getCurrentUser();
         bindView(view);
         setupProfilePicture();
-        setDateTimePickers();
         showCurrentData();
         onSaveChanges();
         setupEditPicture();
@@ -127,86 +113,15 @@ public class EditProfileFragment extends Fragment {
         mEtLastName = view.findViewById(R.id.etLastName);
         mEtUsername = view.findViewById(R.id.etUsername);
         mEtEmail = view.findViewById(R.id.etEmail);
-        mEtStartDate = view.findViewById(R.id.etDateStart);
-        mEtEndDate = view.findViewById(R.id.etDateEnd);
-        mEtStartTime = view.findViewById(R.id.etTimeStart);
-        mEtEndTime = view.findViewById(R.id.etTimeEnd);
         mBtnSave = view.findViewById(R.id.btnSave);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void setDateTimePickers() {
-        initializeCalendar();
-        mEtStartDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateDialog(mEtStartDate);
-            }
-        });
-        mEtEndDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateDialog(mEtEndDate);
-            }
-        });
-        mEtStartTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimeDialog(mEtStartTime);
-            }
-        });
-        mEtEndTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showTimeDialog(mEtEndTime);
-            }
-        });
-    }
-
-    private void showTimeDialog(final TextInputEditText et) {
-        TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                et.setText(i + ":" + i1);
-            }
-        }, mHour, mMinute, false);
-        timePickerDialog.show();
-    }
-
-    private void showDateDialog(final TextInputEditText et) {
-        @SuppressLint("RestrictedApi") MaterialStyledDatePickerDialog datePickerDialog = new MaterialStyledDatePickerDialog(mContext, new DatePickerDialog.OnDateSetListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                et.setText(Integer.toString(month + 1) + "/" + day + "/" + year);
-            }
-        }, mYear, mMonth, mDay);
-        datePickerDialog.show();
-    }
-
-    private void initializeCalendar() {
-        mYear = getInstance().get(YEAR);
-        mMonth = getInstance().get(MONTH);
-        mDay = getInstance().get(DAY_OF_MONTH);
-        mHour = getInstance().get(HOUR_OF_DAY);
-        mMinute = getInstance().get(MINUTE);
-    }
 
     private void showCurrentData() {
         mEtFirstName.setText(mUsr.getString("firstName"));
         mEtLastName.setText(mUsr.getString("lastName"));
         mEtUsername.setText(mUsr.getUsername());
         mEtEmail.setText((mUsr.getEmail() == null) ? "" : mUsr.getEmail());
-        if (mUsr.getString("startAvailability") != null) {
-            String[] fields = mUsr.getString("startAvailability").split(" ");
-            mEtStartDate.setText(fields[DATE]);
-            mEtStartTime.setText(fields[TIME]);
-        }
-        if (mUsr.getString("endAvailability") != null) {
-            String[] fields = mUsr.getString("endAvailability").split(" ");
-            mEtEndDate.setText(fields[DATE]);
-            mEtEndTime.setText(fields[TIME]);
-        }
     }
 
 
@@ -219,8 +134,8 @@ public class EditProfileFragment extends Fragment {
                 mUsr.setEmail(mEtEmail.getText().toString());
                 mUsr.put("firstName", mEtFirstName.getText().toString());
                 mUsr.put("lastName", mEtLastName.getText().toString());
-                mUsr.put("startAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
-                mUsr.put("endAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
+                // mUsr.put("startAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
+                // mUsr.put("endAvailability", mEtStartDate.getText().toString() + " " + mEtStartTime.getText().toString());
                 //save profile picture
                 final BitmapDrawable drawable = (BitmapDrawable) mIvProfileImage.getDrawable();
                 Bitmap image = drawable.getBitmap();

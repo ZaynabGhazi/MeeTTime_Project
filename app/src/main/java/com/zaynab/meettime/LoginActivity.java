@@ -77,6 +77,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (e == null) {
                     goMainActivity();
                     Toast.makeText(LoginActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
+                    user.put("startAvailability", "16:00 16:00 16:00 16:00 16:00 10:00 10:00");
+                    user.put("endAvailability", "22:00 22:00 22:00 22:00 22:00 22:00 22:00");
+
                 } else {
                     Log.e(TAG, "Issue with sign-up.", e);
                     Toast.makeText(LoginActivity.this, "Username or password does not match criteria.", Toast.LENGTH_SHORT).show();

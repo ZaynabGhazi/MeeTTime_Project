@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         mFragmentManager.beginTransaction().replace(R.id.flContainer, new EditProfileFragment()).commit();
                         break;
                     case R.id.settings:
-                        Toast.makeText(MainActivity.this, "Settings", Toast.LENGTH_SHORT).show();
+                        mFragmentManager.beginTransaction().replace(R.id.flContainer, new AvailabilityFragment()).commit();
                         break;
                     case R.id.logOut:
                         ParseUser.logOut();

@@ -78,7 +78,7 @@
                 android:fontFamily="@font/roboto">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etDateStart"
+                    android:id="@+id/etMonStart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
@@ -96,7 +96,7 @@
                 android:fontFamily="@font/roboto">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etTimeStart"
+                    android:id="@+id/etMonEnd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
