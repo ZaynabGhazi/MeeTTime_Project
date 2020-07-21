@@ -28,6 +28,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.zaynab.meettime.Fragments.EditProfileFragment;
 import com.zaynab.meettime.Fragments.LaunchFragment;
+import com.zaynab.meettime.Fragments.MeetingFragment;
 import com.zaynab.meettime.Fragments.ProfileFragment;
 import com.zaynab.meettime.Fragments.TimelineFragment;
 
