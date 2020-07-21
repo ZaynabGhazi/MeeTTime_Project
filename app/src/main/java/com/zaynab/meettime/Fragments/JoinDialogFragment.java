@@ -1,22 +1,22 @@
 package com.zaynab.meettime.Fragments;
 
-import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseUser;
 import com.zaynab.meettime.Algorithms.Scheduler;
+import com.zaynab.meettime.MainActivity;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.support.Logger;
@@ -35,6 +35,7 @@ import static android.text.TextUtils.isEmpty;
 public class JoinDialogFragment extends DialogFragment {
     public static final int TIME = 1;
     public static final int DAY = 0;
+    public static final int MIN_OVERLAP = 5; // in minutes
 
     public static final int MONDAY = 0;
     public static final int TUESDAY = 1;
@@ -177,10 +178,14 @@ public class JoinDialogFragment extends DialogFragment {
             public void onClick(View view) {
                 try {
                     overlap[0] = Scheduler.findIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
-                    if (overlap[0]) {
+                    double overlap_duration = Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
+                    if (overlap[0] && overlap_duration >= MIN_OVERLAP) {
                         Logger.notify(TAG, "Overlap!", getContext(), null);
                         Logger.notify(TAG, "Intersection is " + Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting) + " minutes", getContext(), null);
-                    } else Logger.notify(TAG, "No overlap!", getContext(), null);
+                    } else {
+                        Logger.notify(TAG, "No overlap!", getContext(), null);
+                        Snackbar.make(view, R.string.snackbar_cant_join, Snackbar.LENGTH_SHORT).show();
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

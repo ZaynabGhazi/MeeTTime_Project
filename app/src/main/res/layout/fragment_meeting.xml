@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_13pm"
+                    android:text="@string/time_1pm"
                     android:paddingTop="800dp"
                     android:layout_centerHorizontal="true" />
 
@@ -256,7 +256,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_14pm"
+                    android:text="@string/time_2pm"
                     android:paddingTop="860dp"
                     android:layout_centerHorizontal="true" />
 
@@ -271,7 +271,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_15pm"
+                    android:text="@string/time_3pm"
                     android:paddingTop="920dp"
                     android:layout_centerHorizontal="true" />
 
@@ -286,7 +286,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_16pm"
+                    android:text="@string/time_4pm"
                     android:paddingTop="980dp"
                     android:layout_centerHorizontal="true" />
 
@@ -301,7 +301,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_17pm"
+                    android:text="@string/time_5pm"
                     android:paddingTop="1040dp"
                     android:layout_centerHorizontal="true" />
 
@@ -316,7 +316,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_18pm"
+                    android:text="@string/time_6pm"
                     android:paddingTop="1100dp"
                     android:layout_centerHorizontal="true" />
 
@@ -331,7 +331,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_19pm"
+                    android:text="@string/time_7pm"
                     android:paddingTop="1160dp"
                     android:layout_centerHorizontal="true" />
 
@@ -346,7 +346,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_20pm"
+                    android:text="@string/time_8pm"
                     android:paddingTop="1220dp"
                     android:layout_centerHorizontal="true" />
 
@@ -361,7 +361,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_21pm"
+                    android:text="@string/time_9pm"
                     android:paddingTop="1280dp"
                     android:layout_centerHorizontal="true" />
 
@@ -376,7 +376,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_22pm"
+                    android:text="@string/time_10pm"
                     android:paddingTop="1340dp"
                     android:layout_centerHorizontal="true" />
 
@@ -391,7 +391,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/colorBlack"
                     android:textStyle="bold"
-                    android:text="@string/time_23pm"
+                    android:text="@string/time_11pm"
                     android:paddingTop="1400dp"
                     android:layout_centerHorizontal="true" />
 
@@ -400,15 +400,6 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="1440dp"
                     android:background="@color/colorDivider" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorBlack"
-                    android:textStyle="bold"
-                    android:text="@string/time_24pm"
-                    android:paddingTop="1460dp"
-                    android:layout_centerHorizontal="true" />
 
                 <View
                     android:layout_width="fill_parent"
@@ -570,12 +561,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="1440dp"
-                    android:background="@color/colorDivider" />
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="1500dp"
                     android:background="@color/colorDivider" />
             </RelativeLayout>
         </LinearLayout>

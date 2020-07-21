@@ -35,12 +35,11 @@ import java.util.Stack;
 public class MeetingFragment extends Fragment {
     public static final String TAG = "MEETING_FRAGMENT";
     public static final int SEPARATION_INCREMENT = 100;
+    private int mEventIndex;
+    private int mEventSeparation = 0;
 
     private TextView mEventDate;
     private RelativeLayout mLayout;
-    private int mEventIndex;
-
-    private int eventSeparation = 0;
 
 
     public MeetingFragment() {
@@ -95,7 +94,7 @@ public class MeetingFragment extends Fragment {
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         lParam.topMargin = topMargin;
-        lParam.leftMargin = eventSeparation;
+        lParam.leftMargin = mEventSeparation;
         mEventView.setLayoutParams(lParam);
         mEventView.setPadding(24, 0, 24, 0);
         mEventView.setHeight(height);
@@ -105,7 +104,7 @@ public class MeetingFragment extends Fragment {
         RandomColors rand = new RandomColors();
         int color = rand.getColor();
         mEventView.setBackgroundColor(color);
-        eventSeparation += SEPARATION_INCREMENT;
+        mEventSeparation += SEPARATION_INCREMENT;
         mLayout.addView(mEventView, mEventIndex - 1);
     }
 
@@ -132,7 +131,7 @@ public class MeetingFragment extends Fragment {
     }
 
 
-    //generate shiny random colors:
+    //generate random colors from list-palette:
     class RandomColors {
         private Stack<Integer> recycle, colors;
 
