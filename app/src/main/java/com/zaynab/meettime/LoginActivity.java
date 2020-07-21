@@ -13,7 +13,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.zaynab.meettime.support.Logger;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -79,6 +81,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Sign-up successful!", Toast.LENGTH_SHORT).show();
                     user.put("startAvailability", "16:00 16:00 16:00 16:00 16:00 10:00 10:00");
                     user.put("endAvailability", "22:00 22:00 22:00 22:00 22:00 22:00 22:00");
+                    user.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null)
+                                Logger.notify(TAG, "Error saving default availability", LoginActivity.this, e);
+                        }
+                    });
 
                 } else {
                     Log.e(TAG, "Issue with sign-up.", e);
