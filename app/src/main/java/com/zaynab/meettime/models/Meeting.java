@@ -1,17 +1,23 @@
 package com.zaynab.meettime.models;
 
+import android.provider.CalendarContract;
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.zaynab.meettime.support.Logger;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Meeting")
 public class Meeting extends ParseObject implements Serializable {
@@ -52,12 +58,12 @@ public class Meeting extends ParseObject implements Serializable {
         return getRelation("attendees");
     }
 
-    public void inviteUser(ParseUser attendee) {
+    public void addUser(ParseUser attendee) {
         getAttendees().add(attendee);
         saveInBackground();
     }
 
-    public void uninviteUser(ParseUser attendee) {
+    public void removeUser(ParseUser attendee) {
         getAttendees().remove(attendee);
         saveInBackground();
     }
@@ -135,5 +141,40 @@ public class Meeting extends ParseObject implements Serializable {
     public void removeAttendanceData(UserTime attendance) {
         getAttendanceData().remove(attendance);
         saveInBackground();
+    }
+
+    public boolean isAttendee(ParseUser usr) {
+        final boolean[] isAttendee = {false};
+        ParseRelation<ParseUser> attendees = this.getAttendees();
+        final ParseQuery<ParseUser> isMember = attendees.getQuery();
+        isMember.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        if (objects.get(i).getObjectId().equals(usr.getObjectId())) {
+                            isAttendee[0] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        return isAttendee[0];
+    }
+
+    public void getAttendeesList(List<ParseUser> users) {
+        ParseRelation<ParseUser> attendees = this.getAttendees();
+        final ParseQuery<ParseUser> list = attendees.getQuery();
+        list.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+                if (e == null) {
+                    users.addAll(objects);
+
+                } else
+                    Log.e("meeting", "Error fetching list of attendees", e);
+            }
+        });
     }
 }

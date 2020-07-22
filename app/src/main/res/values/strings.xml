@@ -28,4 +28,6 @@
     <string name="time_11pm">11 pm</string>
     <string name="current_day_date">8 October, 2016</string>
     <string name="snackbar_cant_join">You cannot join this meeting in this time frame. Try again!</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

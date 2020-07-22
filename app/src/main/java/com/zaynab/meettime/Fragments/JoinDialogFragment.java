@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -15,10 +16,11 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.zaynab.meettime.Algorithms.Scheduler;
-import com.zaynab.meettime.MainActivity;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
+import com.zaynab.meettime.models.UserTime;
 import com.zaynab.meettime.support.Logger;
 
 import java.text.ParseException;
@@ -182,6 +184,7 @@ public class JoinDialogFragment extends DialogFragment {
                     if (overlap[0] && overlap_duration >= MIN_OVERLAP) {
                         Logger.notify(TAG, "Overlap!", getContext(), null);
                         Logger.notify(TAG, "Intersection is " + Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting) + " minutes", getContext(), null);
+                        enrollUser(meeting, ParseUser.getCurrentUser());
                     } else {
                         Logger.notify(TAG, "No overlap!", getContext(), null);
                         Snackbar.make(view, R.string.snackbar_cant_join, Snackbar.LENGTH_SHORT).show();
@@ -190,6 +193,40 @@ public class JoinDialogFragment extends DialogFragment {
                     e.printStackTrace();
                 }
 
+            }
+        });
+    }
+
+    private void enrollUser(Meeting meeting, ParseUser currentUser) {
+        UserTime attendance = new UserTime();
+        attendance.setUser(currentUser);
+        attendance.setAvailabilityStart(mEtStartTime.getText().toString());
+        attendance.setAvailabilityEnd(mEtEndTime.getText().toString());
+        attendance.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    meeting.addAttendanceData(attendance);
+                    meeting.addUser(currentUser);
+                    meeting.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(com.parse.ParseException e) {
+                            if (e != null) {
+                                Logger.notify(TAG, "Error enrolling user in the meeting!", getContext(), e);
+
+                            } else {
+                                Toast.makeText(getContext(), "joined successfully!", Toast.LENGTH_SHORT).show();
+                                //navigate to meeting details:
+                                Bundle b = new Bundle();
+                                b.putSerializable("MEETING", meeting);
+                                MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
+                                meetingDetailsFragment.setArguments(b);
+                                ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment).commit();
+                                getDialog().dismiss();
+                            }
+                        }
+                    });
+                }
             }
         });
     }
