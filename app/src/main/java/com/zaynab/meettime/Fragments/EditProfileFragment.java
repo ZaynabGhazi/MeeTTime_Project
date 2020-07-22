@@ -16,11 +16,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -78,8 +80,8 @@ public class EditProfileFragment extends Fragment {
         bindView(view);
         setupProfilePicture();
         showCurrentData();
-        onSaveChanges();
         setupEditPicture();
+        onSaveChanges();
     }
 
     private void setupEditPicture() {
@@ -145,16 +147,18 @@ public class EditProfileFragment extends Fragment {
                     @Override
                     public void done(ParseException e) {
                         if (e != null) {
-                            Toast.makeText(mContext, "Error updating profile!", Toast.LENGTH_SHORT);
+                            Toast.makeText(mContext, "Error updating profile!", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Error updating profile", e);
                             return;
                         }
-                        Toast.makeText(mContext, "Error updating profile!", Toast.LENGTH_SHORT);
+                        Toast.makeText(mContext, "updated successfully!", Toast.LENGTH_SHORT).show();
                         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ProfileFragment()).commit();
                         //update bottom navigation bar
                         ((BottomNavigationView) getActivity().findViewById(R.id.bottomNavigationView)).setSelectedItemId(R.id.action_profile);
                         //update Navigation Drawer instantly
                         if (drawable != null)
                             Glide.with(mContext).load(drawable).apply(RequestOptions.circleCropTransform()).into(((ImageView) getActivity().findViewById(R.id.drawerImage)));
+                        ((TextView) getActivity().findViewById(R.id.tvGreeting)).setText("Hi " + mEtFirstName.getText().toString() + " !");
                     }
                 });
             }

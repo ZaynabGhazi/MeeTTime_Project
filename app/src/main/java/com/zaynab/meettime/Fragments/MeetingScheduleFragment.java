@@ -1,23 +1,35 @@
 package com.zaynab.meettime.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 
 import java.util.Arrays;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.FindCallback;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 import com.zaynab.meettime.R;
+import com.zaynab.meettime.models.Meeting;
+import com.zaynab.meettime.models.UserTime;
 
 
 import java.text.ParseException;
@@ -25,16 +37,19 @@ import java.text.SimpleDateFormat;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Stack;
+
+import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
 
 /**
  * A simple {@link Fragment} subclass.
  * create an instance of this fragment.
  */
-public class MeetingFragment extends Fragment {
+public class MeetingScheduleFragment extends Fragment {
     public static final String TAG = "MEETING_FRAGMENT";
-    public static final int SEPARATION_INCREMENT = 100;
+    public static final int SEPARATION_INCREMENT = 40;
     private int mEventIndex;
     private int mEventSeparation = 0;
 
@@ -42,15 +57,17 @@ public class MeetingFragment extends Fragment {
     private RelativeLayout mLayout;
 
 
-    public MeetingFragment() {
+    public MeetingScheduleFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_meeting, container, false);
+        Bundle b = getArguments();
+        Meeting meeting = (Meeting) b.getSerializable("MEETING");
         bindView(v);
         try {
-            displayOwnerAvailability();
+            displayAvailability(meeting);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -64,11 +81,6 @@ public class MeetingFragment extends Fragment {
 
     }
 
-    private String displayDateInString(Date mDate) {
-        SimpleDateFormat formatter = new SimpleDateFormat("d MMMM, yyyy", Locale.ENGLISH);
-        return formatter.format(mDate);
-    }
-
     private Date getDate(String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return formatter.parse(date);
@@ -79,17 +91,17 @@ public class MeetingFragment extends Fragment {
         return ((int) convertDpToPx(getContext(), timeDifference / 60000));
     }
 
-    private void displayEventSection(Date eventDate, int height, String message) {
+    private void displayEventSection(Date eventDate, int height, String message, ParseUser user) {
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
         String displayValue = timeFormatter.format(eventDate);
         String[] hourMinutes = displayValue.split(":");
         int hours = Integer.parseInt(hourMinutes[0]);
         int minutes = Integer.parseInt(hourMinutes[1]);
         int topViewMargin = ((int) convertDpToPx(getContext(), hours * 60 + minutes));
-        createEventView(topViewMargin, height, message);
+        createEventView(topViewMargin, height, message, user);
     }
 
-    private void createEventView(int topMargin, int height, String message) {
+    private void createEventView(int topMargin, int height, String message, ParseUser user) {
         TextView mEventView = new TextView(getContext());
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         lParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -100,29 +112,51 @@ public class MeetingFragment extends Fragment {
         mEventView.setHeight(height);
         mEventView.setGravity(0x11);
         mEventView.setTextColor(Color.parseColor("#ffffff"));
-        mEventView.setText(message);
+        try {
+            mEventView.setText(user.fetchIfNeeded().getUsername());
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
         RandomColors rand = new RandomColors();
         int color = rand.getColor();
         mEventView.setBackgroundColor(color);
         mEventSeparation += SEPARATION_INCREMENT;
         mLayout.addView(mEventView, mEventIndex - 1);
+        user.fetchInBackground();
+        mEventView.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                //ToDo: Implement new view containing profile picture and username of attendee corresponding to availability textView
+                return true;
+            }
+        });
     }
 
-    private void displayOwnerAvailability() throws ParseException {
+    private void displayAvailability(Meeting meeting) throws ParseException {
+        mEventDate.setText(meeting.getTimeStart().split(" ")[DAY]);
         //TODO: Implement this method
-        //Code below for testing
-
-        Date eventDate = getDate("21/07/2020 08:00");
-        Date endDate = getDate("21/07/2020 11:00");
-        String eventMessage = "test";
-        int eventBlockHeight = getEventTimeFrame(eventDate, endDate);
-        displayEventSection(eventDate, eventBlockHeight, eventMessage);
-
-        Date eventDate1 = getDate("21/07/2020 10:30");
-        Date endDate1 = getDate("21/07/2020 15:30");
-        String eventMessage1 = "test";
-        int eventBlockHeight1 = getEventTimeFrame(eventDate1, endDate1);
-        displayEventSection(eventDate1, eventBlockHeight1, eventMessage1);
+        ParseRelation<UserTime> attendees = meeting.getAttendanceData();
+        final ParseQuery<UserTime> query = attendees.getQuery();
+        query.findInBackground(new FindCallback<UserTime>() {
+            @Override
+            public void done(List<UserTime> objects, com.parse.ParseException e) {
+                if (e == null) {
+                    for (int j = 0; j < objects.size(); j++) {
+                        UserTime data = objects.get(j);
+                        try {
+                            Date availability_start = getDate("21/07/2020 " + data.getAvailabilityStart());
+                            Date availability_end = getDate("21/07/2020 " + data.getAvailabilityEnd());
+                            int availabilityBlockHeight = getEventTimeFrame(availability_start, availability_end);
+                            displayEventSection(availability_start, availabilityBlockHeight, "availability", data.getUser());
+                        } catch (ParseException ex) {
+                            ex.printStackTrace();
+                        }
+                    }//end_loop
+                }//end_works
+                else Log.e(TAG, "Error fetching userTime objects", e);
+            }//end_done
+        });
 
     }
 

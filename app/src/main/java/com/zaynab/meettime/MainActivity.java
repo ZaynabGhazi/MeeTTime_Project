@@ -28,7 +28,7 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.zaynab.meettime.Fragments.EditProfileFragment;
 import com.zaynab.meettime.Fragments.LaunchFragment;
-import com.zaynab.meettime.Fragments.MeetingFragment;
+import com.zaynab.meettime.Fragments.MeetingScheduleFragment;
 import com.zaynab.meettime.Fragments.ProfileFragment;
 import com.zaynab.meettime.Fragments.TimelineFragment;
 
@@ -136,10 +136,9 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.options_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        // Assumes current activity is the searchable activity
         ComponentName cn = new ComponentName(this, SearchableActivity.class);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(cn));
-        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        searchView.setIconifiedByDefault(false);
 
         return true;
     }

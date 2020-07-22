@@ -142,39 +142,4 @@ public class Meeting extends ParseObject implements Serializable {
         getAttendanceData().remove(attendance);
         saveInBackground();
     }
-
-    public boolean isAttendee(ParseUser usr) {
-        final boolean[] isAttendee = {false};
-        ParseRelation<ParseUser> attendees = this.getAttendees();
-        final ParseQuery<ParseUser> isMember = attendees.getQuery();
-        isMember.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        if (objects.get(i).getObjectId().equals(usr.getObjectId())) {
-                            isAttendee[0] = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-        return isAttendee[0];
-    }
-
-    public void getAttendeesList(List<ParseUser> users) {
-        ParseRelation<ParseUser> attendees = this.getAttendees();
-        final ParseQuery<ParseUser> list = attendees.getQuery();
-        list.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
-                    users.addAll(objects);
-
-                } else
-                    Log.e("meeting", "Error fetching list of attendees", e);
-            }
-        });
-    }
 }

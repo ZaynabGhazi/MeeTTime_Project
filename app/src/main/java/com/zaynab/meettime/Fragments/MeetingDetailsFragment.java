@@ -1,11 +1,13 @@
 package com.zaynab.meettime.Fragments;
 
 import android.content.Context;
-import android.media.Image;
+import android.icu.text.DateFormat;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.MapView;
 import com.google.android.material.button.MaterialButton;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -28,10 +31,10 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
-import com.zaynab.meettime.support.Logger;
 import com.zaynab.meettime.utilities.UsersAdapter;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +42,8 @@ import java.util.List;
  */
 public class MeetingDetailsFragment extends Fragment {
     public static final String TAG = "MEETING_DETAILS_FRAGMENT";
+    public static final int TIME = 1;
+    public static final int DAY = 0;
 
     private ImageView mIvBackground;
     private Context mContext;
@@ -90,12 +95,13 @@ public class MeetingDetailsFragment extends Fragment {
         mAllAttendees = new ArrayList<>();
         ParseFile bg_image = meeting.getParseFile("bgPicture");
         if (bg_image != null)
-            Glide.with(mContext).load(bg_image.getUrl()).into(mIvBackground);
+            Glide.with(mContext).load(bg_image.getUrl()).fitCenter().into(mIvBackground);
         mTvTitle.setText(meeting.getTitle());
-        //TODO: EDIT TIME DISPLAY + Zoom Link + Maps View
-        mTvTime.setText(meeting.getTimeStart());
+        //TODO: Zoom Link + Maps View
+        mTvTime.setText(getTimeString(meeting));
         mTvDesc.setText(meeting.getDescription());
-        hideSchedule(meeting);
+        //edit:
+        if (meeting.isScheduled()) showSchedule(meeting);
         if (meeting.getZoomUrl() != null) {
             mMvLocation.setVisibility(View.GONE);
         } else mTvZoomLink.setVisibility(View.GONE);
@@ -109,20 +115,32 @@ public class MeetingDetailsFragment extends Fragment {
         setupRecycler(meeting);
     }
 
-    private void hideSchedule(Meeting meeting) {
+
+    private void showSchedule(Meeting meeting) {
         ParseRelation<ParseUser> attendees = meeting.getAttendees();
         final ParseQuery<ParseUser> isMember = attendees.getQuery();
-        isMember.findInBackground(new FindCallback<ParseUser>() {
+        isMember.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+        isMember.getFirstInBackground(new GetCallback<ParseUser>() {
             @Override
-            public void done(List<ParseUser> objects, ParseException e) {
+            public void done(ParseUser object, ParseException e) {
                 if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        if (objects.get(i).getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
-                            mBtnViewSchedule.setVisibility(View.VISIBLE);
-                            break;
-                        }
-                    }
+                    mBtnViewSchedule.setVisibility(View.VISIBLE);
+                    setupSchedule(meeting);
                 }
+
+            }
+        });
+    }
+
+    private void setupSchedule(Meeting meeting) {
+        mBtnViewSchedule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putSerializable("MEETING", meeting);
+                MeetingScheduleFragment meetingScheduleFragment = new MeetingScheduleFragment();
+                meetingScheduleFragment.setArguments(b);
+                ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingScheduleFragment).commit();
             }
         });
     }
@@ -144,5 +162,23 @@ public class MeetingDetailsFragment extends Fragment {
             }
         });
     }
+
+    private String getTimeString(Meeting meeting) {
+        String time = "";
+        String date = meeting.getTimeStart().split(" ")[DAY];
+        DateFormat num_date = new SimpleDateFormat("MM/dd/yyyy");
+        try {
+
+            DateFormat alpha_date = new SimpleDateFormat("MMMM dd, yyyy");
+            Date date_ = num_date.parse(date);
+            String dateString = alpha_date.format(date_);
+            time += dateString;
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        time += ", from " + meeting.getTimeStart().split(" ")[TIME] + " to " + meeting.getTimeEnd().split(" ")[TIME];
+        return time;
+    }
+
 
 }
