@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import com.parse.SaveCallback;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
+import com.zaynab.meettime.models.UserTime;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -168,35 +170,50 @@ public class LaunchFragment extends Fragment {
         mBtnLaunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Meeting meeting = new Meeting();
-                meeting.setTitle(mEtTitle.getText().toString());
-                meeting.setChair(ParseUser.getCurrentUser());
-                meeting.setDescription(mEtDescription.getText().toString());
-                //DateTime format: mm/dd/yyyy hh:mm
-                String timeStart = mEtDate.getText().toString() + " " + mEtTimeStart.getText().toString();
-                String timeEnd = mEtDate.getText().toString() + " " + mEtTimeEnd.getText().toString();
-                meeting.setTimeStart(timeStart);
-                meeting.setTimeEnd(timeEnd);
-                //save background picture
-                final BitmapDrawable drawable = (BitmapDrawable) mIvBackground.getDrawable();
-                if (drawable != null) {
-                    Bitmap image = drawable.getBitmap();
-                    ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-                    ParseFile pictureFile = new ParseFile(outStream.toByteArray());
-                    meeting.put("bgPicture", pictureFile);
+                final Meeting meeting = createMeeting();
+                //ToDo: implement all other features/attributes of a meeting
+                saveAttendance(meeting);
+            }
+        });
+    }
+
+    private void saveAttendance(Meeting meeting) {
+        UserTime attendance = new UserTime();
+        attendance.setUser(ParseUser.getCurrentUser());
+        attendance.setAvailabilityStart(mEtTimeStart.getText().toString());
+        attendance.setAvailabilityEnd(mEtTimeEnd.getText().toString());
+        attendance.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error saving attendance", e);
+                    return;
                 }
-                //implement all other features
-                meeting.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e != null) {
-                            Toast.makeText(mContext, "Error while launching meeting!", Toast.LENGTH_SHORT).show();
+                saveMeeting(meeting, attendance);
+            }
+        });
+    }
+
+    private void saveMeeting(Meeting meeting, UserTime attendance) {
+        makePost(meeting);
+        meeting.addAttendanceData(attendance);
+        meeting.addUser(ParseUser.getCurrentUser());
+        meeting.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    ParseUser current = ParseUser.getCurrentUser();
+                    current.fetchInBackground();
+                    current.getRelation("meetings").add(meeting);
+                    current.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null)
+                                Log.e(TAG, "Error adding meeting to user object", e);
                         }
-                        Toast.makeText(mContext, "Meeting launched successfully!", Toast.LENGTH_SHORT).show();
-                        makePost(meeting);
-                    }
-                });
+                    });
+
+                } else Log.e(TAG, "Error saving meeting upon launch", e);
             }
         });
     }
@@ -259,5 +276,25 @@ public class LaunchFragment extends Fragment {
         return image;
     }
 
-
+    public Meeting createMeeting() {
+        Meeting meeting = new Meeting();
+        meeting.setTitle(mEtTitle.getText().toString());
+        meeting.setChair(ParseUser.getCurrentUser());
+        meeting.setDescription(mEtDescription.getText().toString());
+        //DateTime format: mm/dd/yyyy hh:mm
+        String timeStart = mEtDate.getText().toString() + " " + mEtTimeStart.getText().toString();
+        String timeEnd = mEtDate.getText().toString() + " " + mEtTimeEnd.getText().toString();
+        meeting.setTimeStart(timeStart);
+        meeting.setTimeEnd(timeEnd);
+        //save background picture
+        final BitmapDrawable drawable = (BitmapDrawable) mIvBackground.getDrawable();
+        if (drawable != null) {
+            Bitmap image = drawable.getBitmap();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            ParseFile pictureFile = new ParseFile(outStream.toByteArray());
+            meeting.put("bgPicture", pictureFile);
+        }
+        return meeting;
+    }
 }
