@@ -135,7 +135,6 @@ public class MeetingScheduleFragment extends Fragment {
 
     private void displayAvailability(Meeting meeting) throws ParseException {
         mEventDate.setText(meeting.getTimeStart().split(" ")[DAY]);
-        //TODO: Implement this method
         ParseRelation<UserTime> attendees = meeting.getAttendanceData();
         final ParseQuery<UserTime> query = attendees.getQuery();
         query.findInBackground(new FindCallback<UserTime>() {
@@ -145,8 +144,8 @@ public class MeetingScheduleFragment extends Fragment {
                     for (int j = 0; j < objects.size(); j++) {
                         UserTime data = objects.get(j);
                         try {
-                            Date availability_start = getDate("21/07/2020 " + data.getAvailabilityStart());
-                            Date availability_end = getDate("21/07/2020 " + data.getAvailabilityEnd());
+                            Date availability_start = getDate(meeting.getTimeStart().split(" ")[DAY] + " " + data.getAvailabilityStart());
+                            Date availability_end = getDate(meeting.getTimeStart().split(" ")[DAY] + " " + data.getAvailabilityEnd());
                             int availabilityBlockHeight = getEventTimeFrame(availability_start, availability_end);
                             displayEventSection(availability_start, availabilityBlockHeight, "availability", data.getUser());
                         } catch (ParseException ex) {

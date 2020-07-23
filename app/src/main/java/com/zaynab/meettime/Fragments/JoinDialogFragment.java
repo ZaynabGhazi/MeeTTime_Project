@@ -216,13 +216,23 @@ public class JoinDialogFragment extends DialogFragment {
 
                             } else {
                                 Toast.makeText(getContext(), "joined successfully!", Toast.LENGTH_SHORT).show();
+                                //add meeting to user object:
+                                currentUser.fetchInBackground();
+                                currentUser.getRelation("meetings").add(meeting);
                                 //navigate to meeting details:
-                                Bundle b = new Bundle();
-                                b.putSerializable("MEETING", meeting);
-                                MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
-                                meetingDetailsFragment.setArguments(b);
-                                ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment).commit();
-                                getDialog().dismiss();
+                                currentUser.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(com.parse.ParseException e) {
+                                        if (e == null) {
+                                            Bundle b = new Bundle();
+                                            b.putSerializable("MEETING", meeting);
+                                            MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
+                                            meetingDetailsFragment.setArguments(b);
+                                            ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment).commit();
+                                            getDialog().dismiss();
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
