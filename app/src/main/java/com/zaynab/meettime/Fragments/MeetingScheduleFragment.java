@@ -23,6 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
@@ -49,7 +51,7 @@ import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
  */
 public class MeetingScheduleFragment extends Fragment {
     public static final String TAG = "MEETING_FRAGMENT";
-    public static final int SEPARATION_INCREMENT = 40;
+    public static final int SEPARATION_INCREMENT = 60;
     private int mEventIndex;
     private int mEventSeparation = 0;
 
@@ -113,7 +115,7 @@ public class MeetingScheduleFragment extends Fragment {
         mEventView.setGravity(0x11);
         mEventView.setTextColor(Color.parseColor("#ffffff"));
         try {
-            mEventView.setText(user.fetchIfNeeded().getUsername());
+            mEventView.setText(user.fetchIfNeeded().getUsername().substring(0, 1));
         } catch (com.parse.ParseException e) {
             e.printStackTrace();
         }
@@ -123,11 +125,15 @@ public class MeetingScheduleFragment extends Fragment {
         mEventSeparation += SEPARATION_INCREMENT;
         mLayout.addView(mEventView, mEventIndex - 1);
         user.fetchInBackground();
-        mEventView.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+        mEventView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                //ToDo: Implement new view containing profile picture and username of attendee corresponding to availability textView
+            public boolean onLongClick(View view) {
+                try {
+                    Snackbar.make(view, user.fetchIfNeeded().getUsername(), BaseTransientBottomBar.LENGTH_SHORT).show();
+                } catch (com.parse.ParseException e) {
+                    e.printStackTrace();
+                    return false;
+                }
                 return true;
             }
         });

@@ -140,7 +140,7 @@ public class MeetingDetailsFragment extends Fragment {
                 b.putSerializable("MEETING", meeting);
                 MeetingScheduleFragment meetingScheduleFragment = new MeetingScheduleFragment();
                 meetingScheduleFragment.setArguments(b);
-                ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingScheduleFragment).commit();
+                ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingScheduleFragment).addToBackStack(null).commit();
             }
         });
     }

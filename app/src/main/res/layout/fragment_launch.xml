@@ -93,11 +93,12 @@
                 android:id="@+id/etTimeStartLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/roboto">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTimeStart"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
@@ -109,13 +110,14 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etTimeEndLayout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/roboto">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTimeEnd"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:ems="10"
