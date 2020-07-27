@@ -20,12 +20,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.button.MaterialButton;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -40,7 +53,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MeetingDetailsFragment extends Fragment {
+public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallback {
     public static final String TAG = "MEETING_DETAILS_FRAGMENT";
     public static final int TIME = 1;
     public static final int DAY = 0;
@@ -57,7 +70,9 @@ public class MeetingDetailsFragment extends Fragment {
     private RecyclerView mRvAttendees;
     private ImageView mIvAddFriends;
     private UsersAdapter mAdapter;
+    private SupportMapFragment mMapFragment;
     protected List<ParseUser> mAllAttendees;
+    private ParseGeoPoint mLocation;
 
 
     public MeetingDetailsFragment() {
@@ -84,10 +99,11 @@ public class MeetingDetailsFragment extends Fragment {
         mTvDesc = v.findViewById(R.id.tvDesc);
         mBtnViewSchedule = v.findViewById(R.id.btnViewSchedule);
         mTvZoomLink = v.findViewById(R.id.tvZoom);
-        mMvLocation = v.findViewById(R.id.mvLocation);
         mRvAttendees = v.findViewById(R.id.rvAttendees);
         mIvAddFriends = v.findViewById(R.id.ivAddFriends);
         mTvAttendeesText = v.findViewById(R.id.tvAttendeesText);
+        mMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+
     }
 
     private void populateView(Meeting meeting) {
@@ -113,6 +129,13 @@ public class MeetingDetailsFragment extends Fragment {
         };
         mAdapter = new UsersAdapter(mContext, mAllAttendees, clickListener);
         setupRecycler(meeting);
+        if (meeting.getParseGeoPoint("meetingLocation") != null) {
+            mLocation = meeting.getParseGeoPoint("meetingLocation");
+            mMapFragment.getMapAsync(this);
+        } else {
+            getChildFragmentManager().beginTransaction().hide(mMapFragment).commit();
+
+        }
     }
 
 
@@ -181,4 +204,13 @@ public class MeetingDetailsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(mLocation == null ? 0 : mLocation.getLatitude(), mLocation == null ? 0 : mLocation.getLongitude())).title("Here!"));
+        if (mLocation != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
+            googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        }
+    }
 }

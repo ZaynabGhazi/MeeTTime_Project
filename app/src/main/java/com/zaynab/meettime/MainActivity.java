@@ -28,7 +28,6 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.zaynab.meettime.Fragments.EditProfileFragment;
 import com.zaynab.meettime.Fragments.LaunchFragment;
-import com.zaynab.meettime.Fragments.MeetingScheduleFragment;
 import com.zaynab.meettime.Fragments.ProfileFragment;
 import com.zaynab.meettime.Fragments.TimelineFragment;
 
@@ -47,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         setupNavigationDrawer();
         setupBottomNavigation();
     }
+
 
     private void setupNavigationDrawer() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.activity_main);

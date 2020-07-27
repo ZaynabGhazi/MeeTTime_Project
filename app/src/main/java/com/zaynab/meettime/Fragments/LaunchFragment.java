@@ -28,21 +28,30 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.models.UserTime;
+import com.zaynab.meettime.support.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static android.icu.util.Calendar.*;
 import static com.zaynab.meettime.Fragments.EditProfilePictureFragment.PICK_PHOTO_CODE;
@@ -59,8 +68,8 @@ public class LaunchFragment extends Fragment {
     private int mDay;
     private int mHour;
     private int mMinute;
-    private Calendar mCalendar;
     private Context mContext;
+    private PlacesClient mPlacesClient;
 
 
     private TextInputEditText mEtTitle;
@@ -69,13 +78,14 @@ public class LaunchFragment extends Fragment {
     private TextInputEditText mEtDate;
     private TextInputEditText mEtTimeStart;
     private TextInputEditText mEtTimeEnd;
-    private TextInputEditText mEtLocation;
     private MaterialButton mBtnRemoteLink;
     private TextInputEditText mEtDescription;
     private MaterialButton mBtnInvite;
     private SwitchMaterial mBtnPrivate;
     private MaterialButton mBtnLaunch;
     private ImageView mIvBackground;
+    private AutocompleteSupportFragment mPlacesFragment;
+    private ParseGeoPoint mLocation;
 
 
     public LaunchFragment() {
@@ -95,6 +105,8 @@ public class LaunchFragment extends Fragment {
         setDateTimePickers();
         launchMeeting();
         addBackgroundPhoto();
+        initializePlacesSDK();
+        setupPlacesFragment();
     }
 
 
@@ -105,13 +117,13 @@ public class LaunchFragment extends Fragment {
         mEtDate = view.findViewById(R.id.etDay);
         mEtTimeStart = view.findViewById(R.id.etTimeStart);
         mEtTimeEnd = view.findViewById(R.id.etTimeEnd);
-        mEtLocation = view.findViewById(R.id.etLocation);
         mBtnRemoteLink = view.findViewById(R.id.btnRemoteLink);
         mEtDescription = view.findViewById(R.id.etDescription);
         mBtnInvite = view.findViewById(R.id.btnInviteFriends);
         mBtnPrivate = view.findViewById(R.id.btnPrivate);
         mBtnLaunch = view.findViewById(R.id.btnLaunch);
         mIvBackground = view.findViewById(R.id.ivBackground);
+
     }
 
     private void setDateTimePickers() {
@@ -198,6 +210,9 @@ public class LaunchFragment extends Fragment {
         makePost(meeting);
         meeting.addAttendanceData(attendance);
         meeting.addUser(ParseUser.getCurrentUser());
+        if (mLocation != null) {
+            meeting.put("meetingLocation", mLocation);
+        }
         meeting.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -297,4 +312,27 @@ public class LaunchFragment extends Fragment {
         }
         return meeting;
     }
+
+    private void initializePlacesSDK() {
+        Places.initialize(mContext.getApplicationContext(), getString(R.string.places_API_KEY));
+        mPlacesClient = Places.createClient(mContext);
+    }
+
+    private void setupPlacesFragment() {
+        mPlacesFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        mPlacesFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        mPlacesFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                mLocation = new ParseGeoPoint(place.getLatLng().latitude, place.getLatLng().longitude);
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
+
+
 }

@@ -19,8 +19,8 @@
             android:id="@+id/ivBackground"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:scaleType="fitCenter"
             android:backgroundTint="#FFFFFF"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/add_photo_icon"
             tools:srcCompat="@drawable/add_photo_icon" />
 
@@ -128,24 +128,21 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/etLocationLayout"
+        <TextView
+            android:id="@+id/tvLocationHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            app:startIconDrawable="@drawable/location_icon">
+            android:padding="8dp"
+            android:text="Select a location for the meeting:"
+            android:textStyle="bold" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etLocation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:ems="10"
-                android:fontFamily="@font/roboto"
-                android:hint="select a location for the meeting.."
-                android:inputType="textPostalAddress"
-                android:visibility="visible" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <fragment
+            android:id="@+id/autocomplete_fragment"
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnRemoteLink"
