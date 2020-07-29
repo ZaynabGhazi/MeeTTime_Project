@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
                 int id = item.getItemId();
                 switch (id) {
                     case R.id.editProfile:
-                        mFragmentManager.beginTransaction().replace(R.id.flContainer, new EditProfileFragment()).commit();
+                        mFragmentManager.beginTransaction().replace(R.id.flContainer, new EditProfileFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.settings:
-                        mFragmentManager.beginTransaction().replace(R.id.flContainer, new AvailabilityFragment()).commit();
+                        mFragmentManager.beginTransaction().replace(R.id.flContainer, new AvailabilityFragment()).addToBackStack(null).commit();
                         break;
                     case R.id.logOut:
                         ParseUser.logOut();

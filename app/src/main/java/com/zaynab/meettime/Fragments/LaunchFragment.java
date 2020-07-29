@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -86,6 +88,7 @@ public class LaunchFragment extends Fragment {
     private ImageView mIvBackground;
     private AutocompleteSupportFragment mPlacesFragment;
     private ParseGeoPoint mLocation;
+    private TextView mTvInfo;
 
 
     public LaunchFragment() {
@@ -103,6 +106,7 @@ public class LaunchFragment extends Fragment {
         mContext = view.getContext();
         bindView(view);
         setDateTimePickers();
+        setRemoteView();
         launchMeeting();
         addBackgroundPhoto();
         initializePlacesSDK();
@@ -123,6 +127,7 @@ public class LaunchFragment extends Fragment {
         mBtnPrivate = view.findViewById(R.id.btnPrivate);
         mBtnLaunch = view.findViewById(R.id.btnLaunch);
         mIvBackground = view.findViewById(R.id.ivBackground);
+        mTvInfo = view.findViewById(R.id.tvLocationHint);
 
     }
 
@@ -312,6 +317,24 @@ public class LaunchFragment extends Fragment {
         }
         return meeting;
     }
+
+    private void setRemoteView() {
+        mBtnInperson.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!b) {
+                    mTvInfo.setVisibility(View.GONE);
+                    getChildFragmentManager().beginTransaction().hide(mPlacesFragment).commit();
+                    mBtnRemoteLink.setVisibility(View.VISIBLE);
+                } else {
+                    mTvInfo.setVisibility(View.VISIBLE);
+                    getChildFragmentManager().beginTransaction().show(mPlacesFragment).commit();
+                    mBtnRemoteLink.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
 
     private void initializePlacesSDK() {
         Places.initialize(mContext.getApplicationContext(), getString(R.string.places_API_KEY));

@@ -50,9 +50,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:checked="true"
                 android:enabled="true"
                 android:fontFamily="@font/roboto"
-                android:text="In Person" />
+                android:text="In Person"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/btnTime"
@@ -61,8 +64,10 @@
                 android:layout_gravity="start|right|center_vertical"
                 android:layout_margin="8dp"
                 android:fontFamily="@font/roboto"
-                android:text="Set a fixed date/time"
+                android:text="Set a fixed time"
                 android:textAlignment="viewEnd"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
                 tools:ignore="RtlCompat" />
         </LinearLayout>
 
@@ -135,6 +140,7 @@
             android:fontFamily="@font/roboto"
             android:padding="8dp"
             android:text="Select a location for the meeting:"
+            android:textColor="@color/colorWhite"
             android:textStyle="bold" />
 
         <fragment
@@ -150,7 +156,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:text="Generate Zoom Link"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etDescriptionlayout"
@@ -183,7 +189,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:fontFamily="@font/roboto"
-            android:text="Private" />
+            android:text="Private"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnLaunch"

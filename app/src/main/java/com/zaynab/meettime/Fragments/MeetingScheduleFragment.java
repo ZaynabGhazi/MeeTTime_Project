@@ -29,6 +29,7 @@ import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.zaynab.meettime.Algorithms.Scheduler;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.UserTime;
@@ -70,6 +71,11 @@ public class MeetingScheduleFragment extends Fragment {
         bindView(v);
         try {
             displayAvailability(meeting);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        try {
+            Scheduler.getBestHour(meeting);
         } catch (ParseException e) {
             e.printStackTrace();
         }
