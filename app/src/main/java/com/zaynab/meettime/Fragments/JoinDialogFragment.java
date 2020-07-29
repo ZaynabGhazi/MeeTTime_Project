@@ -1,6 +1,7 @@
 package com.zaynab.meettime.Fragments;
 
 import android.app.TimePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.github.jinatonic.confetti.CommonConfetti;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
@@ -24,9 +26,7 @@ import com.zaynab.meettime.models.UserTime;
 import com.zaynab.meettime.support.Logger;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.icu.util.Calendar.HOUR_OF_DAY;
 import static android.icu.util.Calendar.MINUTE;
@@ -52,6 +52,7 @@ public class JoinDialogFragment extends DialogFragment {
     private TextInputEditText mEtStartTime;
     private TextInputEditText mEtEndTime;
     private MaterialButton mBtnConfirm;
+
     private int mHour;
     private int mMinute;
 
@@ -83,6 +84,7 @@ public class JoinDialogFragment extends DialogFragment {
         mEtStartTime = v.findViewById(R.id.etMonEnd);
         mEtEndTime = v.findViewById(R.id.etTimeEnd);
         mBtnConfirm = v.findViewById(R.id.btnConfirm);
+
     }
 
     private void initializeDefaultData(Meeting meeting) {
@@ -187,7 +189,6 @@ public class JoinDialogFragment extends DialogFragment {
 
 
     private void setupConfirm(Meeting meeting) throws ParseException {
-        //TODO: Algorithm linking + new view
         final boolean[] overlap = {false};
         mBtnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +213,10 @@ public class JoinDialogFragment extends DialogFragment {
     }
 
     private void enrollUser(Meeting meeting, ParseUser currentUser) {
+        //display confetti
+        CommonConfetti.rainingConfetti(((AppCompatActivity) getContext()).findViewById(R.id.flContainer), new int[]{Color.BLUE})
+                .stream(20).setEmissionRate(100000);
+
         UserTime attendance = new UserTime();
         attendance.setUser(currentUser);
         attendance.setAvailabilityStart(mEtStartTime.getText().toString());
@@ -254,6 +259,7 @@ public class JoinDialogFragment extends DialogFragment {
             }
         });
     }
+
 
     private String formatTime(String time) {
         double time_d = Double.parseDouble(time);

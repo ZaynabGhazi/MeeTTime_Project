@@ -103,8 +103,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ParseFile bg_image = post.getMeeting().getParseFile("bgPicture");
             if (bg_image != null)
                 Glide.with(mContext).load(bg_image.getUrl()).into(mIvBackground);
-            // if (post.getOwner().getUsername().equals(ParseUser.getCurrentUser().getUsername()))
-            //    mBtnJoin.setVisibility(View.GONE);
             setupJoin();
         }
 
