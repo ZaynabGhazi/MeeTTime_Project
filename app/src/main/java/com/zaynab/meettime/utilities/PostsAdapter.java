@@ -117,11 +117,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
                     joinDialogFragment.setArguments(b);
                     FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
-                    Fragment prev = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
-                    if (prev != null) {
-                        ft.remove(prev);
-                    }
-                    ft.addToBackStack(null);
                     joinDialogFragment.show(ft, "dialog");
                 }
             });

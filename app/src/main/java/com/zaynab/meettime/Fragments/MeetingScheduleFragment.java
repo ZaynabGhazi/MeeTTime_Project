@@ -71,11 +71,7 @@ public class MeetingScheduleFragment extends Fragment {
         bindView(v);
         try {
             displayAvailability(meeting);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        try {
-            Scheduler.getBestHour(meeting);
+            displayBestHour(meeting);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -120,29 +116,35 @@ public class MeetingScheduleFragment extends Fragment {
         mEventView.setHeight(height);
         mEventView.setGravity(0x11);
         mEventView.setTextColor(Color.parseColor("#ffffff"));
-        try {
-            mEventView.setText(user.fetchIfNeeded().getUsername().substring(0, 1));
-        } catch (com.parse.ParseException e) {
-            e.printStackTrace();
+
+        if (user == null) mEventView.setText("meeTTime");
+        else {
+            try {
+                mEventView.setText(user.fetchIfNeeded().getUsername().substring(0, 1));
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+            }
         }
         RandomColors rand = new RandomColors();
         int color = rand.getColor();
         mEventView.setBackgroundColor(color);
         mEventSeparation += SEPARATION_INCREMENT;
         mLayout.addView(mEventView, mEventIndex - 1);
-        user.fetchInBackground();
-        mEventView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                try {
-                    Snackbar.make(view, user.fetchIfNeeded().getUsername(), BaseTransientBottomBar.LENGTH_SHORT).show();
-                } catch (com.parse.ParseException e) {
-                    e.printStackTrace();
-                    return false;
+        if (user != null) {
+            user.fetchInBackground();
+            mEventView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    try {
+                        Snackbar.make(view, user.fetchIfNeeded().getUsername(), BaseTransientBottomBar.LENGTH_SHORT).show();
+                    } catch (com.parse.ParseException e) {
+                        e.printStackTrace();
+                        return false;
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     private void displayAvailability(Meeting meeting) throws ParseException {
@@ -171,10 +173,25 @@ public class MeetingScheduleFragment extends Fragment {
 
     }
 
+    private void displayBestHour(Meeting meeting) throws ParseException {
+        Scheduler.Interval best_hour = Scheduler.getBestHour(meeting);
+        Date best_hour_start = getDate(meeting.getTimeStart().split(" ")[DAY] + " " + formatTime(String.valueOf(best_hour.getStart())));
+        displayEventSection(best_hour_start, ((int) convertDpToPx(getContext(), 60)), "", null);
+
+    }
+
+    //Helper functions:
     public float convertDpToPx(Context context, float dp) {
         return dp * context.getResources().getDisplayMetrics().density;
     }
 
+    private String formatTime(String time) {
+        double time_d = Double.parseDouble(time);
+        int hours = (int) time_d;
+        int minutes = (int) ((time_d - hours) * 60);
+        String formatted = "" + hours + ":" + minutes;
+        return formatted;
+    }
 
     //generate random colors from list-palette:
     class RandomColors {

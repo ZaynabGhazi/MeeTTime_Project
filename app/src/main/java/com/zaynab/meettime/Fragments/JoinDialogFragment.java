@@ -128,7 +128,13 @@ public class JoinDialogFragment extends DialogFragment {
         //fetch day of week
         Calendar c = Calendar.getInstance();
         String meetingDate = meeting.getString("timeStart");
-        c.setTime(getDate(meetingDate));
+        //Calendar month counting starts from 0
+        // c.setTime(getDate(meetingDate));
+        c.set(Calendar.YEAR, Integer.parseInt(meetingDate.split(" ")[0].split("/")[2]));
+        c.set(Calendar.MONTH, Integer.parseInt(meetingDate.split(" ")[0].split("/")[0]) - 1);
+        c.set(Calendar.DAY_OF_MONTH, Integer.parseInt(meetingDate.split(" ")[0].split("/")[1]));
+
+
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         //fetch corresponding availability data
         ParseUser currentUser = ParseUser.getCurrentUser();
@@ -138,34 +144,42 @@ public class JoinDialogFragment extends DialogFragment {
         if (!isEmpty(startTime) && !isEmpty(endTime)) {
             String[] start_fields = startTime.split(" ");
             String[] end_fields = endTime.split(" ");
+            Toast.makeText(getContext(), "day fo week " + dayOfWeek, Toast.LENGTH_SHORT).show();
             switch (dayOfWeek) {
                 case 1: //SUNDAY
-                    mEtStartTime.setText(start_fields[SUNDAY]);
-                    mEtEndTime.setText(end_fields[SUNDAY]);
+                    Scheduler.Interval hour_sun = Scheduler.suggestBestHour(meeting, start_fields[SUNDAY], end_fields[SUNDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_sun.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_sun.getEnd())));
                     break;
                 case 2:
-                    mEtStartTime.setText(start_fields[MONDAY]);
-                    mEtEndTime.setText(end_fields[MONDAY]);
+                    Scheduler.Interval hour_mon = Scheduler.suggestBestHour(meeting, start_fields[MONDAY], end_fields[MONDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_mon.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_mon.getEnd())));
                     break;
                 case 3:
-                    mEtStartTime.setText(start_fields[TUESDAY]);
-                    mEtEndTime.setText(end_fields[TUESDAY]);
+                    Scheduler.Interval hour_tue = Scheduler.suggestBestHour(meeting, start_fields[TUESDAY], end_fields[TUESDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_tue.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_tue.getEnd())));
                     break;
                 case 4:
-                    mEtStartTime.setText(start_fields[WEDNESDAY]);
-                    mEtEndTime.setText(end_fields[WEDNESDAY]);
+                    Scheduler.Interval hour_wed = Scheduler.suggestBestHour(meeting, start_fields[WEDNESDAY], end_fields[WEDNESDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_wed.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_wed.getEnd())));
                     break;
                 case 5:
-                    mEtStartTime.setText(start_fields[THURSDAY]);
-                    mEtEndTime.setText(end_fields[THURSDAY]);
+                    Scheduler.Interval hour_thu = Scheduler.suggestBestHour(meeting, start_fields[THURSDAY], end_fields[THURSDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_thu.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_thu.getEnd())));
                     break;
                 case 6:
-                    mEtStartTime.setText(start_fields[FRIDAY]);
-                    mEtEndTime.setText(end_fields[FRIDAY]);
+                    Scheduler.Interval hour_fri = Scheduler.suggestBestHour(meeting, start_fields[FRIDAY], end_fields[FRIDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_fri.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_fri.getEnd())));
                     break;
                 case 7:
-                    mEtStartTime.setText(start_fields[SATURDAY]);
-                    mEtEndTime.setText(end_fields[SATURDAY]);
+                    Scheduler.Interval hour_sat = Scheduler.suggestBestHour(meeting, start_fields[SATURDAY], end_fields[SATURDAY]);
+                    mEtStartTime.setText(formatTime(String.valueOf(hour_sat.getStart())));
+                    mEtEndTime.setText(formatTime(String.valueOf(hour_sat.getEnd())));
                     break;
             }//end_switch
         }
@@ -228,8 +242,8 @@ public class JoinDialogFragment extends DialogFragment {
                                             b.putSerializable("MEETING", meeting);
                                             MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
                                             meetingDetailsFragment.setArguments(b);
-                                            ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment).commit();
                                             getDialog().dismiss();
+                                            ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment, "MDF").addToBackStack("MDF").commit();
                                         }
                                     }
                                 });
@@ -241,9 +255,12 @@ public class JoinDialogFragment extends DialogFragment {
         });
     }
 
-    private Date getDate(String date) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("mm/dd/yyyy HH:mm");
-        return formatter.parse(date);
+    private String formatTime(String time) {
+        double time_d = Double.parseDouble(time);
+        int hours = (int) time_d;
+        int minutes = (int) ((time_d - hours) * 60);
+        String formatted = "" + hours + ":" + minutes;
+        return formatted;
     }
 
 }

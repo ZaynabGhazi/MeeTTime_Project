@@ -1,5 +1,6 @@
 package com.zaynab.meettime.Algorithms;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.parse.FindCallback;
@@ -18,6 +19,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static com.zaynab.meettime.Algorithms.Scheduler.HOUR;
+import static com.zaynab.meettime.Algorithms.Scheduler.MIN;
 import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
 
 public class Scheduler {
@@ -66,8 +69,9 @@ public class Scheduler {
 
     }
 
-    public static void getBestHour(Meeting meeting) throws ParseException {
+    public static Interval getBestHour(Meeting meeting) throws ParseException {
         List<Interval> list = new ArrayList<>();
+        List<UserTime> ut_list = new ArrayList<>();
         //get chairPerson's availability:
         String meetingTimeStart = meeting.getString("timeStart");
         String meetingTimeEnd = meeting.getString("timeEnd");
@@ -76,40 +80,50 @@ public class Scheduler {
         Date mStart = getTime(timeStart);
         Date mEnd = getTime(timeEnd);
         //parse userTime data
+
+        return computeBestHour(meeting, list, ut_list);
+    }
+
+    public static Interval suggestBestHour(Meeting meeting, String userTimeStart, String userTimeEnd) throws ParseException {
+        List<Interval> list = new ArrayList<>();
+        List<UserTime> ut_list = new ArrayList<>();
+        //add day-specific availability to list
+        double hours_start = Double.parseDouble(userTimeStart.split(":")[HOUR]);
+        double hours_end = Double.parseDouble(userTimeEnd.toString().split(":")[HOUR]);
+        double min_start = Double.parseDouble(userTimeEnd.toString().split(":")[MIN]);
+        double min_end = Double.parseDouble(userTimeEnd.toString().split(":")[MIN]);
+        list.add(new Interval((hours_start + min_start / 60), (hours_end + min_end / 60)));
+        return computeBestHour(meeting, list, ut_list);
+    }
+
+    public static Interval computeBestHour(Meeting meeting, List<Interval> list, List<UserTime> ut_list) {
         ParseRelation<UserTime> attendees = meeting.getAttendanceData();
         final ParseQuery<UserTime> query = attendees.getQuery();
-        query.findInBackground(new FindCallback<UserTime>() {
-            @Override
-            public void done(List<UserTime> objects, com.parse.ParseException e) {
-                if (e == null) {
-                    for (int j = 0; j < objects.size(); j++) {
-                        UserTime data = objects.get(j);
-                        String availability_start = data.getAvailabilityStart();
-                        String availability_end = data.getAvailabilityEnd();
-                        double hours_start = Double.parseDouble(availability_start.split(":")[HOUR]);
-                        double hours_end = Double.parseDouble(availability_end.toString().split(":")[HOUR]);
-                        double min_start = Double.parseDouble(availability_start.toString().split(":")[MIN]);
-                        double min_end = Double.parseDouble(availability_end.toString().split(":")[MIN]);
-                        list.add(new Interval((hours_start + min_start / 60), (hours_end + min_end / 60)));
-                    }//end_loop
-                    Log.i("BEST_HOUR", "best interval is " + getBestInterval(list).toString());
-                    //make interval an hour
-                    Interval result = getBestInterval(list);
-                    double result_start = result.getStart();
-                    double result_end = result.getEnd();
-                    if (result.getEnd() - result.getStart() != 1) {
-                        int midpoint = (int) Math.round((result.getEnd() + result.getStart()) / 2);
-                        result_start = midpoint - 0.5;
-                        result_end = midpoint + 0.5;
-                    }
-                    Interval best_hour = new Interval(result_start, result_end);
-                    Log.i("BEST_HOUR", "best hour is " + best_hour.toString());
-
-                }//end_works
-                else Log.e(TAG, "Error fetching userTime objects while computing best hour", e);
-            }//end_done
-
-        });
+        try {
+            ut_list.addAll(query.find());
+        } catch (com.parse.ParseException e) {
+            e.printStackTrace();
+        }
+        for (int j = 0; j < ut_list.size(); j++) {
+            UserTime data = ut_list.get(j);
+            String availability_start = data.getAvailabilityStart();
+            String availability_end = data.getAvailabilityEnd();
+            double hours_start_ = Double.parseDouble(availability_start.split(":")[HOUR]);
+            double hours_end_ = Double.parseDouble(availability_end.toString().split(":")[HOUR]);
+            double min_start_ = Double.parseDouble(availability_start.toString().split(":")[MIN]);
+            double min_end_ = Double.parseDouble(availability_end.toString().split(":")[MIN]);
+            list.add(new Interval((hours_start_ + min_start_ / 60), (hours_end_ + min_end_ / 60)));
+        }//end_loop
+        Interval result = getBestInterval(list);
+        double result_start = result.getStart();
+        double result_end = result.getEnd();
+        if (result.getEnd() - result.getStart() != 1) {
+            int midpoint = (int) Math.round((result.getEnd() + result.getStart()) / 2);
+            result_start = midpoint - 0.5;
+            result_end = midpoint + 0.5;
+        }
+        Interval best_hour = new Interval(result_start, result_end);
+        return best_hour;
     }
 
     /* Implementation of Marzullo's algorithm
@@ -141,79 +155,81 @@ public class Scheduler {
         return new Interval(bestStart, bestEnd);
 
     }
+
+
+    //Helper classes
+    static class Pair implements Comparable<Pair> {
+        private Double offset;
+        private Integer type;
+
+        public Pair(Double offset, Integer type) {
+            this.offset = offset;
+            this.type = type;
+        }
+
+        public Double getOffset() {
+            return offset;
+        }
+
+        public void setOffset(Double offset) {
+            this.offset = offset;
+        }
+
+        public Integer getType() {
+            return type;
+        }
+
+        public void setType(Integer type) {
+            this.type = type;
+        }
+
+        @Override
+        public int compareTo(Pair o) {
+            if (o.getOffset().equals(this.getOffset())) return o.getType() - this.getType();
+            return (this.getOffset() - o.getOffset()) > 0 ? 1 : -1;
+        }
+
+        @Override
+        public String toString() {
+            return "Pair{" +
+                    "offset=" + offset +
+                    ", type=" + type +
+                    '}';
+        }
+    }
+
+    public static class Interval {
+        private Double start;
+        private Double end;
+
+        public Interval(Double start, Double end) {
+            this.start = start;
+            this.end = end;
+        }
+
+        public Double getStart() {
+            return start;
+        }
+
+        public void setStart(Double start) {
+            this.start = start;
+        }
+
+        public Double getEnd() {
+            return end;
+        }
+
+        public void setEnd(Double end) {
+            this.end = end;
+        }
+
+        @Override
+        public String toString() {
+            return "Interval{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    '}';
+        }
+    }
 }
 
-//Helper classes
-class Pair implements Comparable<Pair> {
-    private Double offset;
-    private Integer type;
-
-    public Pair(Double offset, Integer type) {
-        this.offset = offset;
-        this.type = type;
-    }
-
-    public Double getOffset() {
-        return offset;
-    }
-
-    public void setOffset(Double offset) {
-        this.offset = offset;
-    }
-
-    public Integer getType() {
-        return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    @Override
-    public int compareTo(Pair o) {
-        if (o.getOffset().equals(this.getOffset())) return o.getType() - this.getType();
-        return (this.getOffset() - o.getOffset()) > 0 ? 1 : -1;
-    }
-
-    @Override
-    public String toString() {
-        return "Pair{" +
-                "offset=" + offset +
-                ", type=" + type +
-                '}';
-    }
-}
-
-class Interval {
-    private Double start;
-    private Double end;
-
-    public Interval(Double start, Double end) {
-        this.start = start;
-        this.end = end;
-    }
-
-    public Double getStart() {
-        return start;
-    }
-
-    public void setStart(Double start) {
-        this.start = start;
-    }
-
-    public Double getEnd() {
-        return end;
-    }
-
-    public void setEnd(Double end) {
-        this.end = end;
-    }
-
-    @Override
-    public String toString() {
-        return "Interval{" +
-                "start=" + start +
-                ", end=" + end +
-                '}';
-    }
-}
