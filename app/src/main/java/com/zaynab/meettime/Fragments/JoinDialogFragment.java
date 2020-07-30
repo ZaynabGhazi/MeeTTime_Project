@@ -22,6 +22,7 @@ import com.parse.SaveCallback;
 import com.zaynab.meettime.Algorithms.Scheduler;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
+import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.models.UserTime;
 import com.zaynab.meettime.support.Logger;
 
@@ -243,12 +244,7 @@ public class JoinDialogFragment extends DialogFragment {
                                     @Override
                                     public void done(com.parse.ParseException e) {
                                         if (e == null) {
-                                            Bundle b = new Bundle();
-                                            b.putSerializable("MEETING", meeting);
-                                            MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
-                                            meetingDetailsFragment.setArguments(b);
-                                            getDialog().dismiss();
-                                            ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment, "MDF").addToBackStack("MDF").commit();
+                                            makePost(meeting);
                                         }
                                     }
                                 });
@@ -256,6 +252,24 @@ public class JoinDialogFragment extends DialogFragment {
                         }
                     });
                 }
+            }
+        });
+    }
+
+    private void makePost(Meeting meeting) {
+        Post post = new Post();
+        post.setOwner(ParseUser.getCurrentUser());
+        post.setMeeting(meeting);
+        post.setLaunched(false);
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                Bundle b = new Bundle();
+                b.putSerializable("MEETING", meeting);
+                MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
+                meetingDetailsFragment.setArguments(b);
+                getDialog().dismiss();
+                ((AppCompatActivity) getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment, "MDF").addToBackStack("MDF").commit();
             }
         });
     }

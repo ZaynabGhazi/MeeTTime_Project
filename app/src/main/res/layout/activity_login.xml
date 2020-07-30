@@ -8,6 +8,12 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/app_logo" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tvUsernameLayout"
         android:layout_width="match_parent"
