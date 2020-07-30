@@ -3,6 +3,7 @@ package com.zaynab.meettime.Fragments;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.View;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -47,7 +48,6 @@ public class ProfileFragment extends TimelineFragment {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include("owner");
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
-        query.setLimit(20);
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -56,6 +56,7 @@ public class ProfileFragment extends TimelineFragment {
                     Log.e(TAG, "Issue with getting posts.");
                     return;
                 }
+                mProgressBar.setVisibility(View.GONE);
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getCaption() + ", username: " + post.getOwner().getUsername());
                 }
@@ -67,11 +68,10 @@ public class ProfileFragment extends TimelineFragment {
     }
 
     @Override
-    protected void populateTimeline(int i) {
+    protected void populateTimeline() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include("owner");
         query.whereEqualTo("owner", ParseUser.getCurrentUser());
-        query.setLimit(i);
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override

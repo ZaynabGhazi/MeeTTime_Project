@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -35,6 +36,7 @@ public class TimelineFragment extends Fragment {
     protected SwipeRefreshLayout mSwipeContainer;
     private EndlessRecyclerViewScrollListener mScrollListener;
     protected List<Post> mAllPosts;
+    protected ProgressBar mProgressBar;
 
     public TimelineFragment() {
     }
@@ -49,12 +51,14 @@ public class TimelineFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bindView(view);
+        mProgressBar.setVisibility(View.VISIBLE);
         queryPosts();
         make_refreshOnSwipe();
 
     }
 
     private void bindView(View view) {
+        mProgressBar = view.findViewById(R.id.progressbar);
         mRvPosts = view.findViewById(R.id.rvPosts);
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         mAllPosts = new ArrayList<>();
@@ -108,15 +112,14 @@ public class TimelineFragment extends Fragment {
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                populateTimeline(20);
+                populateTimeline();
             }
         });
     }
 
-    protected void populateTimeline(int i) {
+    protected void populateTimeline() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include("owner");
-        query.setLimit(i);
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -147,6 +150,7 @@ public class TimelineFragment extends Fragment {
                     Log.e(TAG, "Issue with getting posts.");
                     return;
                 }
+                mProgressBar.setVisibility(View.GONE);
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getCaption() + ", username: " + post.getOwner().getUsername());
                 }
