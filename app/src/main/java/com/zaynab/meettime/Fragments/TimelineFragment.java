@@ -52,7 +52,6 @@ public class TimelineFragment extends Fragment {
         queryPosts();
         make_refreshOnSwipe();
 
-
     }
 
     private void bindView(View view) {

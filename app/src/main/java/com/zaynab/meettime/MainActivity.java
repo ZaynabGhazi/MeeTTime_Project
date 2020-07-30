@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Timeline!", Toast.LENGTH_SHORT).show();
                         break;
                 }
-                mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
+                mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
                 return true;
             }
         });
