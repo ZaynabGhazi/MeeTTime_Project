@@ -9,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,9 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.zaynab.meettime.Fragments.JoinDialogFragment;
 import com.zaynab.meettime.R;
-import com.zaynab.meettime.models.Post;
 
 import java.util.List;
 
@@ -65,7 +60,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
             if (profile_image != null)
                 Glide.with(mContext).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(mIvPicture);
             mTvUsername.setText(usr.getUsername());
-            mTvFullName.setText(usr.getString("firstName") + " " + usr.getString("lastName"));
+            if (usr.getString("firstName") != null)
+                mTvFullName.setText(usr.getString("firstName") + " " + usr.getString("lastName"));
             if (usr.getUsername().equals(ParseUser.getCurrentUser().getUsername()))
                 mBtnAdd.setVisibility(View.GONE);
 

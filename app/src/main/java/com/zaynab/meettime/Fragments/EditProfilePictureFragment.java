@@ -127,6 +127,7 @@ public class EditProfilePictureFragment extends DialogFragment {
         } else { // Result was a failure
             Toast.makeText(getContext(), "Picture wasn't chosen!", Toast.LENGTH_SHORT).show();
         }
+        this.dismiss();
     }
 
 

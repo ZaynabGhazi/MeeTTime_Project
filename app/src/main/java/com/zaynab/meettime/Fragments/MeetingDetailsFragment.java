@@ -199,7 +199,7 @@ public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallba
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        time += ", from " + meeting.getTimeStart().split(" ")[TIME] + " to " + meeting.getTimeEnd().split(" ")[TIME];
+        time += " from " + formatTime(meeting.getTimeStart().split(" ")[TIME].split(":")[0]) + ":" + formatTime(meeting.getTimeStart().split(" ")[TIME].split(":")[1]) + " to " + formatTime(meeting.getTimeEnd().split(" ")[TIME].split(":")[0]) + ":" + formatTime(meeting.getTimeEnd().split(" ")[TIME].split(":")[1]);
         return time;
     }
 
@@ -211,6 +211,15 @@ public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallba
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mLocation.getLatitude(), mLocation.getLongitude()), 15));
             googleMap.animateCamera(CameraUpdateFactory.zoomIn());
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        }
+    }
+
+    public String formatTime(String time) {
+        int input = Integer.valueOf(time);
+        if (input >= 10) {
+            return String.valueOf(input);
+        } else {
+            return "0" + String.valueOf(input);
         }
     }
 }

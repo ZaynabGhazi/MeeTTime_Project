@@ -7,8 +7,10 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 @ParseClassName("Post")
-public class Post extends ParseObject {
+public class Post extends ParseObject implements Serializable {
 
     public Post() {
         super();

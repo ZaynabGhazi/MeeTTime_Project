@@ -20,7 +20,7 @@ public class Comment extends ParseObject {
     }
 
     public ParseUser getOwner() {
-        return getOwner();
+        return getParseUser("owner");
     }
 
     public void setOwner(ParseUser usr) {

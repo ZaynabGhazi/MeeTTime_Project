@@ -279,8 +279,15 @@ public class JoinDialogFragment extends DialogFragment {
         double time_d = Double.parseDouble(time);
         int hours = (int) time_d;
         int minutes = (int) ((time_d - hours) * 60);
-        String formatted = "" + hours + ":" + minutes;
+        String formatted = "" + formatTimeZeros(hours) + ":" + formatTimeZeros(minutes);
         return formatted;
     }
 
+    public String formatTimeZeros(int input) {
+        if (input >= 10) {
+            return String.valueOf(input);
+        } else {
+            return "0" + String.valueOf(input);
+        }
+    }
 }

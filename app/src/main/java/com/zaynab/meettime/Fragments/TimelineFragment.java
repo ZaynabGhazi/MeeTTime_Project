@@ -1,5 +1,6 @@
 package com.zaynab.meettime.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.ProgressBar;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.zaynab.meettime.PostDetailsActivity;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.utilities.EndlessRecyclerViewScrollListener;
@@ -66,6 +68,7 @@ public class TimelineFragment extends Fragment {
             @Override
             public void OnItemClicked(int position) {
                 Log.i(TAG, "Post clicked at position " + position);
+                enableCommenting(mAllPosts.get(position));
             }
         };
         mAdapter = new PostsAdapter(getContext(), mAllPosts, clickListener);
@@ -82,6 +85,14 @@ public class TimelineFragment extends Fragment {
             }
         };
         mRvPosts.addOnScrollListener(mScrollListener);
+    }
+
+    private void enableCommenting(Post post) {
+        Intent intent = new Intent(getActivity(), PostDetailsActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("post", post);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     protected void fetchOlderContent(Post last) {

@@ -90,11 +90,6 @@ public class EditProfileFragment extends Fragment {
             public void onClick(View view) {
                 EditProfilePictureFragment editProfilePictureFragment = new EditProfilePictureFragment();
                 FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
-                Fragment prev = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().findFragmentByTag("dialog");
-                if (prev != null) {
-                    ft.remove(prev);
-                }
-                ft.addToBackStack(null);
                 editProfilePictureFragment.show(ft, "dialog");
             }
         });

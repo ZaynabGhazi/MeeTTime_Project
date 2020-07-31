@@ -2,6 +2,7 @@ package com.zaynab.meettime.utilities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,11 +100,21 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             //correct heart icon:
             ParseFile profile_image = post.getOwner().getParseFile("profilePicture");
             if (profile_image != null)
-                Glide.with(mContext).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(mIvProfile);
+                Glide.with(mContext).load(profile_image.getUrl()).placeholder(R.drawable.profile_icon).apply(RequestOptions.circleCropTransform()).into(mIvProfile);
             ParseFile bg_image = post.getMeeting().getParseFile("bgPicture");
             if (bg_image != null)
-                Glide.with(mContext).load(bg_image.getUrl()).into(mIvBackground);
+                Glide.with(mContext).load(bg_image.getUrl()).placeholder(R.drawable.placeholder).into(mIvBackground);
             setupJoin();
+            enableCommenting();
+        }
+
+        private void enableCommenting() {
+            mIvComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mClickListener.OnItemClicked(getAdapterPosition());
+                }
+            });
         }
 
         private void setupJoin() {
