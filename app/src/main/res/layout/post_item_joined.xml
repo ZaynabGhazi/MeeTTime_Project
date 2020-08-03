@@ -63,28 +63,49 @@
         android:layout_marginTop="0dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/ivLike"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            app:srcCompat="@drawable/ufi_heart" />
 
-        <ImageView
-            android:id="@+id/ivComment"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="8dp"
-            app:srcCompat="@drawable/ufi_comment" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/ivShare"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="8dp"
-            app:srcCompat="@drawable/direct" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ivLike"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="8dp"
+                    app:srcCompat="@drawable/ufi_heart" />
+
+
+                <ImageView
+                    android:id="@+id/ivComment"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    app:srcCompat="@drawable/ufi_comment" />
+
+                <ImageView
+                    android:id="@+id/ivShare"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="8dp"
+                    app:srcCompat="@drawable/direct" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/likesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:text="18 likes." />
+        </LinearLayout>
 
         <Space
             android:layout_width="match_parent"

@@ -85,6 +85,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private ImageView mIvShare;
         private MaterialButton mBtnJoin;
         private TextView mTvTimestamp;
+        private TextView mTvLikesCount;
         private View mItemView;
 
         public JoinViewHolder(@NonNull View itemView) {
@@ -98,6 +99,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mIvShare = itemView.findViewById(R.id.ivShare);
             mBtnJoin = itemView.findViewById(R.id.btnJoin);
             mTvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            mTvLikesCount = itemView.findViewById(R.id.likesCount);
             mItemView = itemView;
             itemView.setOnClickListener(this);
         }
@@ -124,8 +126,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             enableCommenting();
             setupDetailedView();
             PostAction postAction = new PostAction();
+            postAction.showCount(post, mTvLikesCount);
             postAction.setupLikeIcon(post, mIvLike);
-            postAction.setupDoubleTapLike(mItemView, post, mIvLike);
+            postAction.setupDoubleTapLike(mItemView, post, mIvLike, mTvLikesCount);
         }
 
         private void setupDetailedView() {
@@ -201,6 +204,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private MaterialButton mBtnView;
         private TextView mTvTimestamp;
         private View mItemView;
+        private TextView mTvLikesCount;
 
         public ViewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -213,6 +217,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mIvShare = itemView.findViewById(R.id.ivShare);
             mBtnView = itemView.findViewById(R.id.btnViewDetails);
             mTvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            mTvLikesCount = itemView.findViewById(R.id.likesCount);
             mItemView = itemView;
             itemView.setOnClickListener(this);
         }
@@ -228,7 +233,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTvCaption.setText(caption);
             mTvTitle.setText(post.getMeeting().getTitle());
             mTvTimestamp.setText((TimeFormatter.getTimeDifference(post.getCreatedAt().toString()).equals("Just now")) ? TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) : TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
-            //correct heart icon:
             ParseFile profile_image = post.getOwner().getParseFile("profilePicture");
             if (profile_image != null)
                 Glide.with(mContext).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(mIvProfile);
@@ -239,7 +243,8 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             enableCommenting();
             PostAction postAction = new PostAction();
             postAction.setupLikeIcon(post, mIvLike);
-            postAction.setupDoubleTapLike(mItemView, post, mIvLike);
+            postAction.showCount(post, mTvLikesCount);
+            postAction.setupDoubleTapLike(mItemView, post, mIvLike, mTvLikesCount);
         }
 
         private void setupViewDetails() {
