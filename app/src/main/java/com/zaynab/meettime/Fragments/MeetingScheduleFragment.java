@@ -9,7 +9,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -63,7 +62,6 @@ public class MeetingScheduleFragment extends Fragment {
     public MeetingScheduleFragment() {
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_meeting, container, false);
@@ -115,7 +113,6 @@ public class MeetingScheduleFragment extends Fragment {
         return ((int) convertDpToPx(getContext(), timeDifference / 60000));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayEventSection(Date eventDate, int height, String message, ParseUser user) {
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
         String displayValue = timeFormatter.format(eventDate);
@@ -126,7 +123,6 @@ public class MeetingScheduleFragment extends Fragment {
         createEventView(topViewMargin, height, message, user);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void createEventView(int topMargin, int height, String message, ParseUser user) {
         TextView mEventView = new TextView(getContext());
         //mEventView.setId();
@@ -193,7 +189,6 @@ public class MeetingScheduleFragment extends Fragment {
         ParseRelation<UserTime> attendees = meeting.getAttendanceData();
         final ParseQuery<UserTime> query = attendees.getQuery();
         query.findInBackground(new FindCallback<UserTime>() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void done(List<UserTime> objects, com.parse.ParseException e) {
                 if (e == null) {
@@ -215,7 +210,6 @@ public class MeetingScheduleFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayBestHour(Meeting meeting) throws ParseException {
         Scheduler.Interval best_hour = Scheduler.getBestHour(meeting);
         Date best_hour_start = getDate(meeting.getTimeStart().split(" ")[DAY] + " " + formatTime(String.valueOf(best_hour.getStart())));

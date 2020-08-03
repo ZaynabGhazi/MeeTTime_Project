@@ -293,8 +293,6 @@ public class JoinDialogFragment extends DialogFragment {
         }
     }
 
-    final String time = "23:15";
-
     public String make12Format(String time) {
         String result = "";
         try {

@@ -3,11 +3,13 @@ package com.zaynab.meettime.utilities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,10 +28,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.zaynab.meettime.Fragments.JoinDialogFragment;
 import com.zaynab.meettime.Fragments.MeetingDetailsFragment;
 import com.zaynab.meettime.R;
@@ -66,6 +70,10 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
+    /*
+     * Two ViewHolders: JoinViewHolder and ViewViewHolder
+     *
+     */
     class JoinViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView mIvProfile;
@@ -77,6 +85,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private ImageView mIvShare;
         private MaterialButton mBtnJoin;
         private TextView mTvTimestamp;
+        private View mItemView;
 
         public JoinViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +98,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mIvShare = itemView.findViewById(R.id.ivShare);
             mBtnJoin = itemView.findViewById(R.id.btnJoin);
             mTvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            mItemView = itemView;
             itemView.setOnClickListener(this);
         }
 
@@ -113,6 +123,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             setupJoin();
             enableCommenting();
             setupDetailedView();
+            new PostAction().setupDoubleTapLike(mItemView, post, mIvLike);
         }
 
         private void setupDetailedView() {
@@ -174,7 +185,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mClickListener.OnItemClicked(getAdapterPosition());
         }
 
-
     }//end_VH_class_JOIN
 
     class ViewViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -188,6 +198,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private ImageView mIvShare;
         private MaterialButton mBtnView;
         private TextView mTvTimestamp;
+        private View mItemView;
 
         public ViewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -200,6 +211,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mIvShare = itemView.findViewById(R.id.ivShare);
             mBtnView = itemView.findViewById(R.id.btnViewDetails);
             mTvTimestamp = itemView.findViewById(R.id.tvTimestamp);
+            mItemView = itemView;
             itemView.setOnClickListener(this);
         }
 
@@ -222,6 +234,8 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             if (bg_image != null)
                 Glide.with(mContext).load(bg_image.getUrl()).into(mIvBackground);
             setupViewDetails();
+            enableCommenting();
+            new PostAction().setupDoubleTapLike(mItemView, post, mIvLike);
         }
 
         private void setupViewDetails() {
@@ -237,11 +251,21 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
         }
 
+        private void enableCommenting() {
+            mIvComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mClickListener.OnItemClicked(getAdapterPosition());
+                }
+            });
+        }
+
 
         @Override
         public void onClick(View view) {
             mClickListener.OnItemClicked(getAdapterPosition());
         }
+
     }//end_VH_class_View
 
     @NonNull
