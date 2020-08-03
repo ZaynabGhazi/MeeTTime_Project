@@ -98,6 +98,7 @@ public class TimelineFragment extends Fragment {
     protected void fetchOlderContent(Post last) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include("createdAt");
+        query.include("owner");
         query.whereLessThan("createdAt", last.getCreatedAt());
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {

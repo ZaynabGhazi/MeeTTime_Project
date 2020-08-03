@@ -123,7 +123,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             setupJoin();
             enableCommenting();
             setupDetailedView();
-            new PostAction().setupDoubleTapLike(mItemView, post, mIvLike);
+            PostAction postAction = new PostAction();
+            postAction.setupLikeIcon(post, mIvLike);
+            postAction.setupDoubleTapLike(mItemView, post, mIvLike);
         }
 
         private void setupDetailedView() {
@@ -235,7 +237,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Glide.with(mContext).load(bg_image.getUrl()).into(mIvBackground);
             setupViewDetails();
             enableCommenting();
-            new PostAction().setupDoubleTapLike(mItemView, post, mIvLike);
+            PostAction postAction = new PostAction();
+            postAction.setupLikeIcon(post, mIvLike);
+            postAction.setupDoubleTapLike(mItemView, post, mIvLike);
         }
 
         private void setupViewDetails() {

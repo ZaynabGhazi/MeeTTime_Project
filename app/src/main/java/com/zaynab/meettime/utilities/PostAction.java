@@ -60,4 +60,15 @@ public class PostAction {
             }
         });
     }
+
+    public void setupLikeIcon(Post post, ImageView ivLikes) {
+        try {
+            ParseUser usr = post.getLikes().getQuery().whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId()).getFirst();
+            if (usr != null) ivLikes.setImageResource(R.drawable.ufi_heart_active);
+
+        } catch (ParseException e) {
+            ivLikes.setImageResource(R.drawable.ufi_heart);
+            e.printStackTrace();
+        }
+    }
 }
