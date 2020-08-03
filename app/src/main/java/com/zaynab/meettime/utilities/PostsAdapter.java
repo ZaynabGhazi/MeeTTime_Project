@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -35,7 +37,11 @@ import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.support.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
 
 public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_JOIN = 0;
@@ -106,6 +112,20 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 Glide.with(mContext).load(bg_image.getUrl()).placeholder(R.drawable.placeholder).into(mIvBackground);
             setupJoin();
             enableCommenting();
+            setupDetailedView();
+        }
+
+        private void setupDetailedView() {
+            mIvBackground.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Bundle b = new Bundle();
+                    b.putSerializable("MEETING", mPosts.get(getAdapterPosition()).getMeeting());
+                    MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
+                    meetingDetailsFragment.setArguments(b);
+                    ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment).addToBackStack(null).commit();
+                }
+            });
         }
 
         private void enableCommenting() {
@@ -121,14 +141,32 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mBtnJoin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Bundle b = new Bundle();
-                    b.putSerializable("MEETING", mPosts.get(getAdapterPosition()).getMeeting());
-                    JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
-                    joinDialogFragment.setArguments(b);
-                    FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
-                    joinDialogFragment.show(ft, "dialog");
+
+                    if (checkIfOutdated(mPosts.get(getAdapterPosition()).getMeeting())) {
+                        Snackbar.make(view, "Oops! This meeting has already happened!", BaseTransientBottomBar.LENGTH_SHORT).show();
+                    } else {
+                        Bundle b = new Bundle();
+                        b.putSerializable("MEETING", mPosts.get(getAdapterPosition()).getMeeting());
+                        JoinDialogFragment joinDialogFragment = new JoinDialogFragment();
+                        joinDialogFragment.setArguments(b);
+                        FragmentTransaction ft = ((AppCompatActivity) view.getContext()).getSupportFragmentManager().beginTransaction();
+                        joinDialogFragment.show(ft, "dialog");
+                    }
                 }
             });
+        }
+
+        private boolean checkIfOutdated(Meeting meeting) {
+            String day = meeting.getTimeEnd().split(" ")[DAY];
+            SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
+            try {
+                Date meeting_day = sdf.parse(day);
+                Date current = new Date();
+                return meeting_day.before(current);
+            } catch (java.text.ParseException e) {
+                e.printStackTrace();
+            }
+            return false;
         }
 
         @Override

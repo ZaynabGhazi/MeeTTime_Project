@@ -199,7 +199,7 @@ public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallba
         } catch (java.text.ParseException e) {
             e.printStackTrace();
         }
-        time += " from " + formatTime(meeting.getTimeStart().split(" ")[TIME].split(":")[0]) + ":" + formatTime(meeting.getTimeStart().split(" ")[TIME].split(":")[1]) + " to " + formatTime(meeting.getTimeEnd().split(" ")[TIME].split(":")[0]) + ":" + formatTime(meeting.getTimeEnd().split(" ")[TIME].split(":")[1]);
+        time += " from " + make12Format(meeting.getTimeStart().split(" ")[TIME]) + " to " + make12Format(meeting.getTimeEnd().split(" ")[TIME]);
         return time;
     }
 
@@ -221,5 +221,17 @@ public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallba
         } else {
             return "0" + String.valueOf(input);
         }
+    }
+
+    public String make12Format(String time) {
+        String result = "";
+        try {
+            final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+            result = new java.text.SimpleDateFormat("K:mm a").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

@@ -5,10 +5,12 @@ import android.graphics.Color;
 
 import java.util.Arrays;
 
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +20,6 @@ import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -62,6 +63,7 @@ public class MeetingScheduleFragment extends Fragment {
     public MeetingScheduleFragment() {
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_meeting, container, false);
@@ -113,6 +115,7 @@ public class MeetingScheduleFragment extends Fragment {
         return ((int) convertDpToPx(getContext(), timeDifference / 60000));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayEventSection(Date eventDate, int height, String message, ParseUser user) {
         SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
         String displayValue = timeFormatter.format(eventDate);
@@ -123,8 +126,10 @@ public class MeetingScheduleFragment extends Fragment {
         createEventView(topViewMargin, height, message, user);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void createEventView(int topMargin, int height, String message, ParseUser user) {
         TextView mEventView = new TextView(getContext());
+        //mEventView.setId();
         RelativeLayout.LayoutParams lParam = new RelativeLayout.LayoutParams(mTextViewWidth, LinearLayout.LayoutParams.WRAP_CONTENT);
         if (user == null)
             lParam = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -151,12 +156,15 @@ public class MeetingScheduleFragment extends Fragment {
                 e.printStackTrace();
             }
         } else {
-            mEventView.setText(message);
+            GradientDrawable gd = new GradientDrawable();
+            gd.setCornerRadius(5);
+            gd.setStroke(5, 0xFF1A237E);
+            mEventView.setBackground(gd);
+            mEventView.setTooltipText("This is the best hour to meet based on everyone's availability!");
         }
         RandomColors rand = new RandomColors();
         int color = rand.getColor();
-        mEventView.setBackgroundColor(color);
-        if (user == null) mEventView.getBackground().setAlpha(100);
+        if (user != null) mEventView.setBackgroundColor(color);
 
         mEventSeparation += mSeparationIncrement;
         mLayout.addView(mEventView, mEventIndex - 1);
@@ -168,16 +176,14 @@ public class MeetingScheduleFragment extends Fragment {
 
     private void makeSnackBar(ParseUser user, TextView mEventView) {
         user.fetchInBackground();
-        mEventView.setOnLongClickListener(new View.OnLongClickListener() {
+        mEventView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View view) {
+            public void onClick(View view) {
                 try {
                     Snackbar.make(view, user.fetchIfNeeded().getUsername(), BaseTransientBottomBar.LENGTH_SHORT).show();
                 } catch (com.parse.ParseException e) {
                     e.printStackTrace();
-                    return false;
                 }
-                return true;
             }
         });
     }
@@ -187,6 +193,7 @@ public class MeetingScheduleFragment extends Fragment {
         ParseRelation<UserTime> attendees = meeting.getAttendanceData();
         final ParseQuery<UserTime> query = attendees.getQuery();
         query.findInBackground(new FindCallback<UserTime>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void done(List<UserTime> objects, com.parse.ParseException e) {
                 if (e == null) {
@@ -208,6 +215,7 @@ public class MeetingScheduleFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void displayBestHour(Meeting meeting) throws ParseException {
         Scheduler.Interval best_hour = Scheduler.getBestHour(meeting);
         Date best_hour_start = getDate(meeting.getTimeStart().split(" ")[DAY] + " " + formatTime(String.valueOf(best_hour.getStart())));

@@ -27,7 +27,9 @@ import com.zaynab.meettime.models.UserTime;
 import com.zaynab.meettime.support.Logger;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.icu.util.Calendar.HOUR_OF_DAY;
 import static android.icu.util.Calendar.MINUTE;
@@ -89,7 +91,7 @@ public class JoinDialogFragment extends DialogFragment {
     }
 
     private void initializeDefaultData(Meeting meeting) {
-        String meetingInfo = "This meeting is scheduled to occur some time between " + meeting.getTimeStart().split(" ")[TIME] + " and " + meeting.getTimeEnd().split(" ")[TIME] + ", on " + meeting.getTimeEnd().split(" ")[DAY] + ".\nWhen would you be able to join?";
+        String meetingInfo = "This meeting is scheduled to occur some time between " + make12Format(meeting.getTimeStart().split(" ")[TIME]) + " and " + make12Format(meeting.getTimeEnd().split(" ")[TIME]) + ", on " + meeting.getTimeEnd().split(" ")[DAY] + ".\nWhen would you be able to join?";
         mTvMeetingInfo.setText(meetingInfo);
 
 
@@ -215,7 +217,7 @@ public class JoinDialogFragment extends DialogFragment {
 
     private void enrollUser(Meeting meeting, ParseUser currentUser) {
         //display confetti
-        CommonConfetti.rainingConfetti(((AppCompatActivity) getContext()).findViewById(R.id.flContainer), new int[]{Color.BLUE})
+        CommonConfetti.rainingConfetti(((AppCompatActivity) getContext()).findViewById(R.id.flContainer), new int[]{Color.BLUE, Color.MAGENTA, Color.CYAN, Color.CYAN, Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN})
                 .stream(20).setEmissionRate(100000);
 
         UserTime attendance = new UserTime();
@@ -290,4 +292,19 @@ public class JoinDialogFragment extends DialogFragment {
             return "0" + String.valueOf(input);
         }
     }
+
+    final String time = "23:15";
+
+    public String make12Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("K:mm a").format(dateObj);
+        } catch (final ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }
