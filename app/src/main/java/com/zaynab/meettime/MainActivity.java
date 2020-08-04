@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +27,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.zaynab.meettime.Fragments.AvailabilityFragment;
+import com.zaynab.meettime.Fragments.CalendarFragment;
 import com.zaynab.meettime.Fragments.EditProfileFragment;
 import com.zaynab.meettime.Fragments.LaunchFragment;
 import com.zaynab.meettime.Fragments.ProfileFragment;
@@ -57,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
         mNavigationView = (NavigationView) findViewById(R.id.nv);
         View hView = mNavigationView.inflateHeaderView(R.layout.nav_header);
         ImageView ivDrawer = hView.findViewById(R.id.drawerImage);
+        TextView tvGreeting = hView.findViewById(R.id.tvGreeting);
         ParseUser current = ParseUser.getCurrentUser();
         current.fetchInBackground();
         ParseFile profile_image = current.getParseFile("profilePicture");
         if (profile_image != null)
             Glide.with(this.getApplicationContext()).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(ivDrawer);
+        tvGreeting.setText("Hi " + (current.getString("firstName") != null ? current.getString("firstName") : "") + "!");
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -108,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, "Profile!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_calendar:
-                        fragment = new Fragment();
+                        fragment = new CalendarFragment();
                         Toast.makeText(MainActivity.this, "Calendar!", Toast.LENGTH_SHORT).show();
                         break;
                     default:
