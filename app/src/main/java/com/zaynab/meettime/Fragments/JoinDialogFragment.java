@@ -296,9 +296,9 @@ public class JoinDialogFragment extends DialogFragment {
     public String make12Format(String time) {
         String result = "";
         try {
-            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             final Date dateObj = sdf.parse(time);
-            result = new SimpleDateFormat("K:mm a").format(dateObj);
+            result = new SimpleDateFormat("hh:mm a").format(dateObj);
         } catch (final ParseException e) {
             e.printStackTrace();
         }

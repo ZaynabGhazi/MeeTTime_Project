@@ -54,6 +54,7 @@ public class MeetingScheduleFragment extends Fragment {
     private int mEventIndex;
     private int mEventSeparation = 0;
     private int mTextViewWidth;
+    private Scheduler.Interval mBestHour;
 
     private TextView mEventDate;
     private RelativeLayout mLayout;
@@ -156,7 +157,7 @@ public class MeetingScheduleFragment extends Fragment {
             gd.setCornerRadius(5);
             gd.setStroke(5, 0xFF1A237E);
             mEventView.setBackground(gd);
-            mEventView.setTooltipText("This is the best hour to meet based on everyone's availability!");
+            mEventView.setTooltipText("This is the best hour to meet based on everyone's availability: " + make12Format(formatTime(mBestHour.getStart() + "")) + "-" + make12Format(formatTime(mBestHour.getEnd() + "")));
         }
         RandomColors rand = new RandomColors();
         int color = rand.getColor();
@@ -212,6 +213,7 @@ public class MeetingScheduleFragment extends Fragment {
 
     private void displayBestHour(Meeting meeting) throws ParseException {
         Scheduler.Interval best_hour = Scheduler.getBestHour(meeting);
+        mBestHour = best_hour;
         Date best_hour_start = getDate(meeting.getTimeStart().split(" ")[DAY] + " " + formatTime(String.valueOf(best_hour.getStart())));
         displayEventSection(best_hour_start, ((int) convertDpToPx(getContext(), 60)), "meeTTime", null);
 
@@ -228,6 +230,18 @@ public class MeetingScheduleFragment extends Fragment {
         int minutes = (int) ((time_d - hours) * 60);
         String formatted = "" + hours + ":" + minutes;
         return formatted;
+    }
+
+    public String make12Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("hh:mm a").format(dateObj);
+        } catch (final ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     //generate random colors from list-palette:

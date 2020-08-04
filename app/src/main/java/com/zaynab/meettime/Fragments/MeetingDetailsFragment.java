@@ -226,9 +226,9 @@ public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallba
     public String make12Format(String time) {
         String result = "";
         try {
-            final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("H:mm");
+            final java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
             final Date dateObj = sdf.parse(time);
-            result = new java.text.SimpleDateFormat("K:mm a").format(dateObj);
+            result = new java.text.SimpleDateFormat("hh:mm a").format(dateObj);
         } catch (final java.text.ParseException e) {
             e.printStackTrace();
         }
