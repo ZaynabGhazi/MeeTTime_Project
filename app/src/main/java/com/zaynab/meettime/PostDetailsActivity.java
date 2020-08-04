@@ -32,6 +32,7 @@ import com.zaynab.meettime.models.Comment;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.utilities.CommentsAdapter;
+import com.zaynab.meettime.utilities.PostAction;
 import com.zaynab.meettime.utilities.PostsAdapter;
 import com.zaynab.meettime.utilities.TimeFormatter;
 import com.zaynab.meettime.utilities.UsersAdapter;
@@ -51,6 +52,7 @@ public class PostDetailsActivity extends AppCompatActivity {
     private TextView mTvTitle;
     private ImageView mIvBackground;
     private ImageView mIvLike;
+    private TextView mTvLikesCount;
     private ImageView mIvShare;
     private TextView mTvTimestamp;
     private TextInputEditText mEtComment;
@@ -85,9 +87,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         mIvCurrentUser = findViewById(R.id.ivCommenter);
         mEtComment = findViewById(R.id.etComment);
         mEtCommentLayout = findViewById(R.id.etCommentLayout);
+        mTvLikesCount = findViewById(R.id.likesCount);
         Glide.with(this).load(ParseUser.getCurrentUser().getParseFile("profilePicture").getUrl()).placeholder(R.drawable.profile_icon).apply(RequestOptions.circleCropTransform()).into(mIvCurrentUser);
 
     }
+
 
     private void populateView(Post post) {
         String caption = (post.getOwner().getUsername().equals(ParseUser.getCurrentUser().getUsername())) ? "You" : post.getOwner().getUsername();
@@ -106,6 +110,11 @@ public class PostDetailsActivity extends AppCompatActivity {
         ParseFile bg_image = post.getMeeting().getParseFile("bgPicture");
         if (bg_image != null)
             Glide.with(this).load(bg_image.getUrl()).placeholder(R.drawable.placeholder).into(mIvBackground);
+        //enable post actions:
+        PostAction postAction = new PostAction();
+        postAction.setupLikeIcon(post, mIvLike);
+        postAction.showCount(post, mTvLikesCount);
+        postAction.setupDoubleTapLike(mIvBackground, post, mIvLike, mTvLikesCount);
     }
 
     private void setupList() {

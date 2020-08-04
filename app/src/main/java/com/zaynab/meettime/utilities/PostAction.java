@@ -87,6 +87,8 @@ public class PostAction {
         if (count > 0) {
             tvLikes.setVisibility(View.VISIBLE);
             tvLikes.setText(count > 1 ? count + " likes" : count + " like");
+        } else {
+            tvLikes.setVisibility(View.GONE);
         }
     }
 }
