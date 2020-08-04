@@ -1,27 +1,17 @@
 package com.zaynab.meettime.Algorithms;
 
-import android.os.AsyncTask;
-import android.util.Log;
-
-import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.UserTime;
-import com.zaynab.meettime.support.Logger;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import static com.zaynab.meettime.Algorithms.Scheduler.HOUR;
-import static com.zaynab.meettime.Algorithms.Scheduler.MIN;
-import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
 
 public class Scheduler {
     public static final String TAG = "SCHEDULER_ALGORITHM";

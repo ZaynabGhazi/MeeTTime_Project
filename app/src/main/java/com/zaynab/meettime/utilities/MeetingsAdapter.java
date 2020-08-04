@@ -1,7 +1,6 @@
 package com.zaynab.meettime.utilities;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,22 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.button.MaterialButton;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseUser;
-import com.zaynab.meettime.Fragments.JoinDialogFragment;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
-import com.zaynab.meettime.models.Post;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.zaynab.meettime.Fragments.JoinDialogFragment.TIME;
@@ -66,7 +60,7 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.ViewHo
             if (profile_image != null)
                 Glide.with(mContext).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(mIvChairPerson);
             mTvEventTitle.setText(meeting.getTitle());
-            mTvEventTime.setText(meeting.getTimeStart().split(" ")[TIME] + " - " + meeting.getTimeEnd().split(" ")[TIME]);
+            mTvEventTime.setText(make12Format(meeting.getTimeStart().split(" ")[TIME]) + " - " + make12Format(meeting.getTimeEnd().split(" ")[TIME]));
         }
 
 
@@ -118,5 +112,17 @@ public class MeetingsAdapter extends RecyclerView.Adapter<MeetingsAdapter.ViewHo
     @Override
     public int getItemViewType(int position) {
         return position;
+    }
+
+    public String make12Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("H:mm");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("K:mm a").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

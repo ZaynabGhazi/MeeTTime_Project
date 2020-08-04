@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -69,7 +70,7 @@ public class CalendarFragment extends Fragment {
         MeetingsAdapter.OnClickListener clickListener = new MeetingsAdapter.OnClickListener() {
             @Override
             public void OnItemClicked(int position) {
-                Log.i(TAG, "Meeting clicked at position " + position);
+                showMeetingDetails(mAllMeetings.get(position));
             }
         };
         mAdapter = new MeetingsAdapter(mContext, mAllMeetings, clickListener);
@@ -121,5 +122,14 @@ public class CalendarFragment extends Fragment {
             }
         });
     }
+
+    private void showMeetingDetails(Meeting meeting) {
+        Bundle b = new Bundle();
+        b.putSerializable("MEETING", meeting);
+        MeetingDetailsFragment meetingDetailsFragment = new MeetingDetailsFragment();
+        meetingDetailsFragment.setArguments(b);
+        ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, meetingDetailsFragment).addToBackStack(null).commit();
+    }
+
 
 }
