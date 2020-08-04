@@ -49,13 +49,10 @@ import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
 
 public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int TYPE_JOIN = 0;
-    public static final int TYPE_VIEW = 1;
 
     private Context mContext;
     private List<Post> mPosts;
     private OnClickListener mClickListener;
-    private Handler mHandler = new Handler();
-    private int mType = 0;
 
 
     //communicate with fragment:
@@ -128,6 +125,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             PostAction postAction = new PostAction();
             postAction.showCount(post, mTvLikesCount);
             postAction.setupLikeIcon(post, mIvLike);
+            postAction.setupCommentIcon(post, mIvComment);
             postAction.setupDoubleTapLike(mItemView, post, mIvLike, mTvLikesCount);
         }
 
@@ -187,6 +185,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         public void onClick(View view) {
+            Log.d("ADAPTER", " clicked");
             mClickListener.OnItemClicked(getAdapterPosition());
         }
 
@@ -243,6 +242,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             enableCommenting();
             PostAction postAction = new PostAction();
             postAction.setupLikeIcon(post, mIvLike);
+            postAction.setupCommentIcon(post, mIvComment);
             postAction.showCount(post, mTvLikesCount);
             postAction.setupDoubleTapLike(mItemView, post, mIvLike, mTvLikesCount);
         }
@@ -298,6 +298,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             ((ViewViewHolder) holder).bind(mPosts.get(position));
         }
+
     }
 
 
@@ -323,7 +324,6 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return position;
     }
 
-    //ToDo: Do Parse query before fetching posts
     @Override
     public int getItemViewType(int position) {
         Meeting meeting = mPosts.get(position).getMeeting();

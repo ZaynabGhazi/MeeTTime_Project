@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
     android:padding="8dp">
 
     <ImageView
@@ -88,6 +89,7 @@
                     android:layout_height="20dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="8dp"
+                    android:clickable="true"
                     app:srcCompat="@drawable/ufi_comment" />
 
                 <ImageView

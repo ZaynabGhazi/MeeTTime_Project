@@ -4,11 +4,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.meettime.R;
+import com.zaynab.meettime.models.Comment;
 import com.zaynab.meettime.models.Post;
 
 public class PostAction {
@@ -19,6 +21,7 @@ public class PostAction {
                 enableLiking(post, ivLikes, tvLikes);
             }
         });
+
     }
 
     private void enableLiking(Post post, ImageView ivLikes, TextView tvLikes) {
@@ -89,6 +92,17 @@ public class PostAction {
             tvLikes.setText(count > 1 ? count + " likes" : count + " like");
         } else {
             tvLikes.setVisibility(View.GONE);
+        }
+    }
+
+    public void setupCommentIcon(Post post, ImageView ivComment) {
+        try {
+            Comment cmmt = post.getComments().getQuery().whereEqualTo("owner", ParseUser.getCurrentUser()).getFirst();
+            if (cmmt != null) ivComment.setImageResource(R.drawable.ufi_comment_active);
+
+        } catch (ParseException e) {
+            ivComment.setImageResource(R.drawable.ufi_comment);
+            e.printStackTrace();
         }
     }
 }
