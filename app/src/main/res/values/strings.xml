@@ -28,4 +28,5 @@
     <string name="time_11pm">11 pm</string>
     <string name="current_day_date">8 October, 2016</string>
     <string name="snackbar_cant_join">You cannot join this meeting in this time frame. Try again!</string>
+    <string name="places_API_KEY">AIzaSyBDhfYYSqWrxa9OqKn68N26uLwHJJeFtPY</string>
 </resources>

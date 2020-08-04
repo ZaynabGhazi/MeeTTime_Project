@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.zaynab.meettime"
-        minSdkVersion 25
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -30,7 +30,7 @@ android {
             buildConfigField "String", "MASTER_KEY", "\"ZaynabMeettimeFBU\""
         }
         release {
-            buildConfigField "String", "APP_ID","\"zaynab-meettime\""
+            buildConfigField "String", "APP_ID", "\"zaynab-meettime\""
             buildConfigField "String", "SERVER_URL", "\"https://zaynab-meettime.herokuapp.com/parse\""
             buildConfigField "String", "MASTER_KEY", "\"ZaynabMeettimeFBU\""
         }
@@ -49,7 +49,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     //parse
     implementation 'com.github.parse-community.Parse-SDK-Android:parse:1.24.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1' // for logging API calls to LogCat
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    // for logging API calls to LogCat
     //material design
     implementation 'com.google.android.material:material:1.1.0'
     //glide
@@ -58,7 +59,14 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
     //calendarView
     implementation 'com.applandeo:material-calendar-view:1.7.0'
-    //day view
+    //Zoom
+    implementation 'androidx.multidex:multidex:2.0.0'
+    //Places
+    implementation 'com.google.android.libraries.places:places:2.3.0'
+    //Kotlin
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72'
+    //Confetti
+    implementation 'com.github.jinatonic.confetti:confetti:1.1.2'
 
 
 
