@@ -44,7 +44,9 @@ public class SearchableActivity extends AppCompatActivity {
         UsersAdapter.OnClickListener clickListener = new UsersAdapter.OnClickListener() {
             @Override
             public void OnItemClicked(int position) {
-                Log.i(TAG, "Post clicked at position " + position);
+                Intent intent = new Intent(SearchableActivity.this, MainActivity.class);
+                intent.putExtra("userId", mAllUsers.get(position).getObjectId());
+                startActivity(intent);
             }
         };
         mAdapter = new UsersAdapter(SearchableActivity.this, mAllUsers, clickListener);

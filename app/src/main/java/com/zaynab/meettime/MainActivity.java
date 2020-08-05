@@ -26,6 +26,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.zaynab.meettime.Fragments.AvailabilityFragment;
 import com.zaynab.meettime.Fragments.CalendarFragment;
@@ -33,6 +34,7 @@ import com.zaynab.meettime.Fragments.EditProfileFragment;
 import com.zaynab.meettime.Fragments.LaunchFragment;
 import com.zaynab.meettime.Fragments.ProfileFragment;
 import com.zaynab.meettime.Fragments.TimelineFragment;
+import com.zaynab.meettime.Fragments.UserFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setupNavigationDrawer();
         setupBottomNavigation();
+        if (getIntent().hasExtra("userId")) showUserFragment(getIntent().getStringExtra("userId"));
+    }
+
+    private void showUserFragment(String userId) {
+
+        Bundle b = new Bundle();
+        b.putSerializable("userId", userId);
+        UserFragment userFragment = new UserFragment();
+        userFragment.setArguments(b);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, userFragment).addToBackStack(null).commit();
     }
 
 
