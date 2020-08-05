@@ -6,8 +6,10 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.icu.util.Calendar;
 import android.net.Uri;
 import android.os.Build;
@@ -54,6 +56,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
+import dagger.Reusable;
+
 import static android.icu.util.Calendar.*;
 import static com.zaynab.meettime.Fragments.EditProfilePictureFragment.PICK_PHOTO_CODE;
 
@@ -71,7 +75,7 @@ public class LaunchFragment extends Fragment {
     private int mMinute;
     private Context mContext;
     private PlacesClient mPlacesClient;
-
+    private boolean mDrawableSelected;
 
     private TextInputEditText mEtTitle;
     private SwitchMaterial mBtnInperson;
@@ -186,6 +190,10 @@ public class LaunchFragment extends Fragment {
         mBtnLaunch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!mDrawableSelected) {
+                    Toast.makeText(mContext, "Please select a picture for the meeting!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 final Meeting meeting = createMeeting();
                 //ToDo: implement all other features/attributes of a meeting
                 saveAttendance(meeting);
@@ -273,10 +281,13 @@ public class LaunchFragment extends Fragment {
         if ((data != null) && requestCode == PICK_PHOTO_CODE) {
             Uri photoUri = data.getData();
             Bitmap selectedImage = loadFromUri(photoUri);
-            if (selectedImage != null)
+            if (selectedImage != null) {
                 Glide.with(getContext()).load(photoUri).centerCrop().into(mIvBackground);
+                mDrawableSelected = true;
+            }
         } else { // Result was a failure
             Toast.makeText(getContext(), "Picture wasn't chosen!", Toast.LENGTH_SHORT).show();
+            mDrawableSelected = false;
         }
     }
 
@@ -286,8 +297,11 @@ public class LaunchFragment extends Fragment {
             if (Build.VERSION.SDK_INT > 27) {
                 ImageDecoder.Source source = ImageDecoder.createSource(getContext().getContentResolver(), photoUri);
                 image = ImageDecoder.decodeBitmap(source);
+                mDrawableSelected = true;
             } else {
                 image = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+                mDrawableSelected = true;
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -306,13 +320,17 @@ public class LaunchFragment extends Fragment {
         meeting.setTimeStart(timeStart);
         meeting.setTimeEnd(timeEnd);
         //save background picture
-        final BitmapDrawable drawable = (BitmapDrawable) mIvBackground.getDrawable();
-        if (drawable != null) {
-            Bitmap image = drawable.getBitmap();
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
-            ParseFile pictureFile = new ParseFile(outStream.toByteArray());
-            meeting.put("bgPicture", pictureFile);
+        Drawable image_dr = mIvBackground.getDrawable();
+        if (mDrawableSelected) {
+            final BitmapDrawable drawable = (BitmapDrawable) image_dr;
+
+            if (drawable != null) {
+                Bitmap image = drawable.getBitmap();
+                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                ParseFile pictureFile = new ParseFile(outStream.toByteArray());
+                meeting.put("bgPicture", pictureFile);
+            }
         }
         return meeting;
     }
