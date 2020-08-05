@@ -174,8 +174,8 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         private boolean checkIfOutdated(Meeting meeting) {
-            String day = meeting.getTimeEnd().split(" ")[DAY];
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+            String day = meeting.getTimeEnd();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
             try {
                 Date meeting_day = sdf.parse(day);
                 Date current = new Date();
