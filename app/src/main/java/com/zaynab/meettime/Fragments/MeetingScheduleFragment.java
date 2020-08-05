@@ -30,7 +30,6 @@ import com.zaynab.meettime.Algorithms.Scheduler;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.UserTime;
-import com.zaynab.meettime.support.Logger;
 
 
 import java.text.ParseException;
@@ -165,7 +164,6 @@ public class MeetingScheduleFragment extends Fragment {
 
         mEventSeparation += mSeparationIncrement;
         mLayout.addView(mEventView, mEventIndex - 1);
-        Logger.notify(TAG, "Bloc added to schedule", getContext(), null);
         if (user != null) {
             makeSnackBar(user, mEventView);
         }

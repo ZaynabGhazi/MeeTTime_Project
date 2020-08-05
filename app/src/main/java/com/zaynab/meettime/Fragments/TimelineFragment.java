@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,6 +25,7 @@ import com.parse.ParseQuery;
 import com.zaynab.meettime.PostDetailsActivity;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Post;
+import com.zaynab.meettime.support.Logger;
 import com.zaynab.meettime.utilities.EndlessRecyclerViewScrollListener;
 import com.zaynab.meettime.utilities.PostsAdapter;
 
@@ -40,13 +44,15 @@ public class TimelineFragment extends Fragment {
     protected List<Post> mAllPosts;
     protected ProgressBar mProgressBar;
 
+
     public TimelineFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_timeline, container, false);
+        View v = inflater.inflate(R.layout.fragment_timeline, container, false);
+        return v;
     }
 
     @Override
@@ -172,4 +178,6 @@ public class TimelineFragment extends Fragment {
         });
 
     }
+
+
 }

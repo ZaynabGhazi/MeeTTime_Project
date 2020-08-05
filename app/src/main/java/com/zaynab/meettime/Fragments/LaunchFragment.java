@@ -49,7 +49,6 @@ import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.models.UserTime;
-import com.zaynab.meettime.support.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

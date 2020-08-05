@@ -149,7 +149,6 @@ public class JoinDialogFragment extends DialogFragment {
         if (!isEmpty(startTime) && !isEmpty(endTime)) {
             String[] start_fields = startTime.split(" ");
             String[] end_fields = endTime.split(" ");
-            Toast.makeText(getContext(), "day fo week " + dayOfWeek, Toast.LENGTH_SHORT).show();
             switch (dayOfWeek) {
                 case 1: //SUNDAY
                     Scheduler.Interval hour_sun = Scheduler.suggestBestHour(meeting, start_fields[SUNDAY], end_fields[SUNDAY]);
@@ -200,11 +199,8 @@ public class JoinDialogFragment extends DialogFragment {
                     overlap[0] = Scheduler.findIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
                     double overlap_duration = Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
                     if (overlap[0] && overlap_duration >= MIN_OVERLAP) {
-                        Logger.notify(TAG, "Overlap!", getContext(), null);
-                        Logger.notify(TAG, "Intersection is " + Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting) + " minutes", getContext(), null);
                         enrollUser(meeting, ParseUser.getCurrentUser());
                     } else {
-                        Logger.notify(TAG, "No overlap!", getContext(), null);
                         Snackbar.make(view, R.string.snackbar_cant_join, Snackbar.LENGTH_SHORT).show();
                     }
                 } catch (ParseException e) {

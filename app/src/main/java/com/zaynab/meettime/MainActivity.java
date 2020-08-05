@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -113,24 +112,19 @@ public class MainActivity extends AppCompatActivity {
                 Fragment fragment;
                 switch (menuItem.getItemId()) {
                     case R.id.action_timeline:
-                        Toast.makeText(MainActivity.this, "Timeline!", Toast.LENGTH_SHORT).show();
                         fragment = new TimelineFragment();
                         break;
                     case R.id.action_launch:
                         fragment = new LaunchFragment();
-                        Toast.makeText(MainActivity.this, "Launch!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_profile:
                         fragment = new ProfileFragment();
-                        Toast.makeText(MainActivity.this, "Profile!", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.action_calendar:
                         fragment = new CalendarFragment();
-                        Toast.makeText(MainActivity.this, "Calendar!", Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         fragment = new TimelineFragment();
-                        Toast.makeText(MainActivity.this, "Timeline!", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 mFragmentManager.beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();

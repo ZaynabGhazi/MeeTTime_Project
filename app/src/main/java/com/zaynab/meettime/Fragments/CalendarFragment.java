@@ -92,7 +92,6 @@ public class CalendarFragment extends Fragment {
             public void onDayClick(EventDay eventDay) {
                 Calendar clickedDayCalendar = eventDay.getCalendar();
                 String date = Integer.toString(Integer.valueOf(clickedDayCalendar.get(Calendar.MONTH)) + 1) + "/" + clickedDayCalendar.get(Calendar.DAY_OF_MONTH) + "/" + clickedDayCalendar.get(Calendar.YEAR);
-                Logger.notify(TAG, "Clicked day " + date, mContext, null);
                 //check if there are any events the user joined this day
                 displayEvents(date);
 
@@ -111,7 +110,6 @@ public class CalendarFragment extends Fragment {
             public void done(List<Meeting> objects, ParseException e) {
                 if (e == null) {
                     if (objects.size() > 0) {
-                        Logger.notify(TAG, "There is an event today!", mContext, null);
                         mAllMeetings.addAll(objects);
                     } else {
                         mAllMeetings.clear();

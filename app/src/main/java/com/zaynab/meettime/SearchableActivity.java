@@ -8,14 +8,11 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.zaynab.meettime.models.Post;
 import com.zaynab.meettime.utilities.UsersAdapter;
 
 import java.util.ArrayList;
@@ -66,7 +63,6 @@ public class SearchableActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
-            Toast.makeText(SearchableActivity.this, "searching for " + query, Toast.LENGTH_LONG).show();
             queryUsers(query);
         }
     }

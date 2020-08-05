@@ -14,11 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -82,7 +80,6 @@ public class UserFragment extends Fragment {
         bindView(view);
         mProgressBar.setVisibility(View.VISIBLE);
         if (user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-            Toast.makeText(mContext, "SAME USER", Toast.LENGTH_SHORT).show();
             mBtnAdd.setVisibility(View.GONE);
 
         }
