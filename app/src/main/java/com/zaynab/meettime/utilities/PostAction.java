@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -30,17 +31,21 @@ public class PostAction {
     }
 
     private void enableLiking(Post post, ImageView ivLikes, TextView tvLikes) {
-        boolean liked = false;
-        try {
-            ParseUser usr = post.getLikes().getQuery().whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId()).getFirst();
-            if (usr != null) liked = true;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        if (!liked) {
-            likePost(post, ivLikes, tvLikes);
-        } else
-            unlikePost(post, ivLikes, tvLikes);
+        final boolean[] liked = {false};
+        post.getLikes().getQuery().whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId()).getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if (e == null) {
+                    if (object != null) liked[0] = true;
+                } else {
+                    e.printStackTrace();
+                }
+                if (!liked[0]) {
+                    likePost(post, ivLikes, tvLikes);
+                } else
+                    unlikePost(post, ivLikes, tvLikes);
+            }
+        });
 
     }
 
@@ -80,14 +85,18 @@ public class PostAction {
     }
 
     public void setupLikeIcon(Post post, ImageView ivLikes) {
-        try {
-            ParseUser usr = post.getLikes().getQuery().whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId()).getFirst();
-            if (usr != null) ivLikes.setImageResource(R.drawable.ufi_heart_active);
+        post.getLikes().getQuery().whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId()).getFirstInBackground(new GetCallback<ParseUser>() {
+            @Override
+            public void done(ParseUser object, ParseException e) {
+                if (e == null) {
+                    if (object != null) ivLikes.setImageResource(R.drawable.ufi_heart_active);
+                } else {
+                    ivLikes.setImageResource(R.drawable.ufi_heart);
+                    e.printStackTrace();
+                }
+            }
+        });
 
-        } catch (ParseException e) {
-            ivLikes.setImageResource(R.drawable.ufi_heart);
-            e.printStackTrace();
-        }
     }
 
     public void showCount(Post post, TextView tvLikes) {
@@ -101,14 +110,19 @@ public class PostAction {
     }
 
     public void setupCommentIcon(Post post, ImageView ivComment) {
-        try {
-            Comment cmmt = post.getComments().getQuery().whereEqualTo("owner", ParseUser.getCurrentUser()).getFirst();
-            if (cmmt != null) ivComment.setImageResource(R.drawable.ufi_comment_active);
 
-        } catch (ParseException e) {
-            ivComment.setImageResource(R.drawable.ufi_comment);
-            e.printStackTrace();
-        }
+        post.getComments().getQuery().whereEqualTo("owner", ParseUser.getCurrentUser()).getFirstInBackground(new GetCallback<Comment>() {
+            @Override
+            public void done(Comment object, ParseException e) {
+                if (e == null) {
+                    if (object != null) ivComment.setImageResource(R.drawable.ufi_comment_active);
+                } else {
+                    ivComment.setImageResource(R.drawable.ufi_comment);
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
     public void showUser(Post post, ImageView ivProfile, Context context) {

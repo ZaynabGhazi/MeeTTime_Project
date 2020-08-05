@@ -199,9 +199,6 @@ public class JoinDialogFragment extends DialogFragment {
                     overlap[0] = Scheduler.findIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
                     double overlap_duration = Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
                     if (overlap[0] && overlap_duration >= MIN_OVERLAP) {
-                        //display confetti
-                        CommonConfetti.rainingConfetti(((AppCompatActivity) getContext()).findViewById(R.id.flContainer), new int[]{Color.BLUE, Color.MAGENTA, Color.CYAN, Color.CYAN, Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN})
-                                .stream(20).setEmissionRate(100000);
                         enrollUser(meeting, ParseUser.getCurrentUser());
                     } else {
                         Snackbar.make(view, R.string.snackbar_cant_join, Snackbar.LENGTH_SHORT).show();
@@ -215,7 +212,8 @@ public class JoinDialogFragment extends DialogFragment {
     }
 
     private void enrollUser(Meeting meeting, ParseUser currentUser) {
-
+        CommonConfetti.rainingConfetti(((AppCompatActivity) getContext()).findViewById(R.id.flContainer), new int[]{Color.BLUE, Color.MAGENTA, Color.CYAN, Color.CYAN, Color.RED, Color.BLUE, Color.YELLOW, Color.GREEN})
+                .stream(500).setEmissionRate(500);
         UserTime attendance = new UserTime();
         attendance.setUser(currentUser);
         attendance.setAvailabilityStart(mEtStartTime.getText().toString());

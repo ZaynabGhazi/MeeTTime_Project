@@ -60,8 +60,17 @@ public class TimelineFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         bindView(view);
         mProgressBar.setVisibility(View.VISIBLE);
+        optimizeRecycler();
         queryPosts();
         make_refreshOnSwipe();
+
+    }
+
+    private void optimizeRecycler() {
+        mRvPosts.setHasFixedSize(true);
+        mRvPosts.setItemViewCacheSize(20);
+        mRvPosts.setDrawingCacheEnabled(true);
+        mRvPosts.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
     }
 
@@ -78,6 +87,7 @@ public class TimelineFragment extends Fragment {
             }
         };
         mAdapter = new PostsAdapter(getContext(), mAllPosts, clickListener);
+        mAdapter.setHasStableIds(true);
         mRvPosts.setAdapter(mAdapter);
         LinearLayoutManager llManager = new LinearLayoutManager(getContext());
         mRvPosts.setLayoutManager(llManager);
