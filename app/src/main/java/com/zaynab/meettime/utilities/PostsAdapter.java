@@ -36,6 +36,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.meettime.Fragments.JoinDialogFragment;
 import com.zaynab.meettime.Fragments.MeetingDetailsFragment;
+import com.zaynab.meettime.Fragments.UserFragment;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Meeting;
 import com.zaynab.meettime.models.Post;
@@ -127,7 +128,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             postAction.setupLikeIcon(post, mIvLike);
             postAction.setupCommentIcon(post, mIvComment);
             postAction.setupDoubleTapLike(mItemView, post, mIvLike, mTvLikesCount);
+            postAction.showUser(mPosts.get(getAdapterPosition()), mIvProfile, mContext);
         }
+
 
         private void setupDetailedView() {
             mIvBackground.setOnClickListener(new View.OnClickListener() {
@@ -245,6 +248,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             postAction.setupCommentIcon(post, mIvComment);
             postAction.showCount(post, mTvLikesCount);
             postAction.setupDoubleTapLike(mItemView, post, mIvLike, mTvLikesCount);
+            postAction.showUser(mPosts.get(getAdapterPosition()), mIvProfile, mContext);
         }
 
         private void setupViewDetails() {

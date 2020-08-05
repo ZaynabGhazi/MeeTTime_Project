@@ -1,14 +1,19 @@
 package com.zaynab.meettime.utilities;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.zaynab.meettime.Fragments.UserFragment;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Comment;
 import com.zaynab.meettime.models.Post;
@@ -105,4 +110,18 @@ public class PostAction {
             e.printStackTrace();
         }
     }
+
+    public void showUser(Post post, ImageView ivProfile, Context context) {
+        ivProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle b = new Bundle();
+                b.putSerializable("post", post);
+                UserFragment userFragment = new UserFragment();
+                userFragment.setArguments(b);
+                ((AppCompatActivity) context).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, userFragment).addToBackStack(null).commit();
+            }
+        });
+    }
+
 }

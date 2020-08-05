@@ -124,7 +124,13 @@ public class MeetingDetailsFragment extends Fragment implements OnMapReadyCallba
         UsersAdapter.OnClickListener clickListener = new UsersAdapter.OnClickListener() {
             @Override
             public void OnItemClicked(int position) {
-                Log.i(TAG, "User clicked at position " + position);
+
+                Bundle b = new Bundle();
+                b.putSerializable("userId", mAllAttendees.get(position).getObjectId());
+                UserFragment userFragment = new UserFragment();
+                userFragment.setArguments(b);
+                ((AppCompatActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, userFragment).addToBackStack(null).commit();
+
             }
         };
         mAdapter = new UsersAdapter(mContext, mAllAttendees, clickListener);
