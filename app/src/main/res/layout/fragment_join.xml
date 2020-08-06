@@ -59,6 +59,13 @@
     </LinearLayout>
 
 
+    <TextView
+        android:id="@+id/tvHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The prefilled time is the best hour for you to join this meeting given your availability and that of the rest of the attendees."
+        android:textSize="10sp" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnConfirm"
         android:layout_width="match_parent"
