@@ -1,6 +1,7 @@
 package com.zaynab.meettime.utilities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.google.android.material.button.MaterialButton;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.zaynab.meettime.MainActivity;
 import com.zaynab.meettime.R;
+import com.zaynab.meettime.SearchableActivity;
 import com.zaynab.meettime.models.Comment;
 
 import java.util.List;
@@ -64,6 +67,14 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
                             ;
             }
             mTvComment.setText(comment.getText());
+            mIvOwnerPicture.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, MainActivity.class);
+                    intent.putExtra("userId", comment.getOwner().getObjectId());
+                    mContext.startActivity(intent);
+                }
+            });
         }
     }//end_VH_class
 
