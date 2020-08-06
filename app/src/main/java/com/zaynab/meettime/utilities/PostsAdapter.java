@@ -44,6 +44,8 @@ import com.zaynab.meettime.support.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.zaynab.meettime.Fragments.JoinDialogFragment.DAY;
@@ -53,6 +55,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Context mContext;
     private List<Post> mPosts;
+    private HashSet<String> mTypes;
     private OnClickListener mClickListener;
 
 
@@ -61,10 +64,11 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         void OnItemClicked(int position);
     }
 
-    public PostsAdapter(Context context, List<Post> posts, OnClickListener clickListener) {
+    public PostsAdapter(Context context, List<Post> posts, OnClickListener clickListener, HashSet<String> types) {
         this.mContext = context;
         this.mPosts = posts;
         this.mClickListener = clickListener;
+        this.mTypes = types;
 
     }
 
@@ -102,8 +106,9 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final Post post) {
-            String caption = (post.getOwner().getUsername().equals(ParseUser.getCurrentUser().getUsername())) ? "You" : post.getOwner().getUsername();
+        public void bind(final Post post) throws ParseException {
+            post.fetchInBackground();
+            String caption = (post.getOwner().fetchIfNeeded().getUsername().equals(ParseUser.getCurrentUser().fetchIfNeeded().getUsername())) ? "You" : post.getOwner().fetchIfNeeded().getUsername();
             if (post.isLaunched()) {
                 caption += " launched a new event";
             } else {
@@ -111,13 +116,14 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             }
             mTvCaption.setText(caption);
+            post.getMeeting().fetchInBackground();
             mTvTitle.setText(post.getMeeting().getTitle());
             mTvTimestamp.setText((TimeFormatter.getTimeDifference(post.getCreatedAt().toString()).equals("Just now")) ? TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) : TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
-            //correct heart icon:
-            ParseFile profile_image = post.getOwner().getParseFile("profilePicture");
+
+            ParseFile profile_image = post.getOwner().fetchIfNeeded().getParseFile("profilePicture");
             if (profile_image != null)
                 Glide.with(mContext).load(profile_image.getUrl()).placeholder(R.drawable.profile_icon).apply(RequestOptions.circleCropTransform()).into(mIvProfile);
-            ParseFile bg_image = post.getMeeting().getParseFile("bgPicture");
+            ParseFile bg_image = post.getMeeting().fetchIfNeeded().getParseFile("bgPicture");
             if (bg_image != null)
                 Glide.with(mContext).load(bg_image.getUrl()).placeholder(R.drawable.placeholder).into(mIvBackground);
             setupJoin();
@@ -224,8 +230,8 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(final Post post) {
-            String caption = (post.getOwner().getUsername().equals(ParseUser.getCurrentUser().getUsername())) ? "You" : post.getOwner().getUsername();
+        public void bind(final Post post) throws ParseException {
+            String caption = (post.getOwner().fetchIfNeeded().getUsername().equals(ParseUser.getCurrentUser().getUsername())) ? "You" : post.getOwner().getUsername();
             if (post.isLaunched()) {
                 caption += " launched a new event";
             } else {
@@ -235,7 +241,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mTvCaption.setText(caption);
             mTvTitle.setText(post.getMeeting().getTitle());
             mTvTimestamp.setText((TimeFormatter.getTimeDifference(post.getCreatedAt().toString()).equals("Just now")) ? TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) : TimeFormatter.getTimeDifference(post.getCreatedAt().toString()) + " ago");
-            ParseFile profile_image = post.getOwner().getParseFile("profilePicture");
+            ParseFile profile_image = post.getOwner().fetchIfNeeded().getParseFile("profilePicture");
             if (profile_image != null)
                 Glide.with(mContext).load(profile_image.getUrl()).apply(RequestOptions.circleCropTransform()).into(mIvProfile);
             ParseFile bg_image = post.getMeeting().getParseFile("bgPicture");
@@ -298,9 +304,17 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_JOIN) {
-            ((JoinViewHolder) holder).bind(mPosts.get(position));
+            try {
+                ((JoinViewHolder) holder).bind(mPosts.get(position));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         } else {
-            ((ViewViewHolder) holder).bind(mPosts.get(position));
+            try {
+                ((ViewViewHolder) holder).bind(mPosts.get(position));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -330,17 +344,7 @@ public class PostsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        Meeting meeting = mPosts.get(position).getMeeting();
-        meeting.fetchInBackground();
-        ParseQuery<ParseUser> query = meeting.getAttendees().getQuery();
-        query.whereEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-        try {
-            query.getFirst();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return 0;
-        }
-        return 1;
+        return mTypes.contains(mPosts.get(position).getMeeting().getObjectId()) ? 1 : 0;
     }
 
 }//end-class

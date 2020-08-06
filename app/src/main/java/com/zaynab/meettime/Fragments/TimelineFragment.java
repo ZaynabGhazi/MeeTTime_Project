@@ -10,26 +10,26 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.os.Handler;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.zaynab.meettime.PostDetailsActivity;
 import com.zaynab.meettime.R;
 import com.zaynab.meettime.models.Post;
-import com.zaynab.meettime.support.Logger;
 import com.zaynab.meettime.utilities.EndlessRecyclerViewScrollListener;
 import com.zaynab.meettime.utilities.PostsAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -43,6 +43,7 @@ public class TimelineFragment extends Fragment {
     private EndlessRecyclerViewScrollListener mScrollListener;
     protected List<Post> mAllPosts;
     protected ProgressBar mProgressBar;
+    protected HashSet<String> mMeetings;
 
 
     public TimelineFragment() {
@@ -59,10 +60,7 @@ public class TimelineFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         bindView(view);
-        mProgressBar.setVisibility(View.VISIBLE);
-        optimizeRecycler();
-        queryPosts();
-        make_refreshOnSwipe();
+
 
     }
 
@@ -79,6 +77,7 @@ public class TimelineFragment extends Fragment {
         mRvPosts = view.findViewById(R.id.rvPosts);
         mSwipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         mAllPosts = new ArrayList<>();
+        mMeetings = new HashSet<>();
         PostsAdapter.OnClickListener clickListener = new PostsAdapter.OnClickListener() {
             @Override
             public void OnItemClicked(int position) {
@@ -86,7 +85,29 @@ public class TimelineFragment extends Fragment {
                 enableCommenting(mAllPosts.get(position));
             }
         };
-        mAdapter = new PostsAdapter(getContext(), mAllPosts, clickListener);
+        ParseUser.getCurrentUser()
+                .getRelation("meetings")
+                .getQuery()
+                .findInBackground(new FindCallback<ParseObject>() {
+                                      @Override
+                                      public void done(List<ParseObject> objects, ParseException e) {
+                                          if (e == null) {
+                                              if (objects.size() > 0) {
+                                                  for (ParseObject object : objects) {
+                                                      mMeetings.add(object.getObjectId());
+                                                  }
+                                              }
+                                          }
+                                          populateView(clickListener);
+                                      }//end_done
+                                  }//end query
+                );
+
+
+    }//end_bind
+
+    private void populateView(PostsAdapter.OnClickListener clickListener) {
+        mAdapter = new PostsAdapter(getContext(), mAllPosts, clickListener, mMeetings);
         mAdapter.setHasStableIds(true);
         mRvPosts.setAdapter(mAdapter);
         LinearLayoutManager llManager = new LinearLayoutManager(getContext());
@@ -101,6 +122,10 @@ public class TimelineFragment extends Fragment {
             }
         };
         mRvPosts.addOnScrollListener(mScrollListener);
+        mProgressBar.setVisibility(View.VISIBLE);
+        optimizeRecycler();
+        queryPosts();
+        make_refreshOnSwipe();
     }
 
     private void enableCommenting(Post post) {
@@ -113,8 +138,8 @@ public class TimelineFragment extends Fragment {
 
     protected void fetchOlderContent(Post last) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include("createdAt");
         query.include("owner");
+        query.include("createdAt");
         query.whereLessThan("createdAt", last.getCreatedAt());
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
@@ -147,7 +172,6 @@ public class TimelineFragment extends Fragment {
 
     protected void populateTimeline() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include("owner");
         query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
@@ -157,7 +181,6 @@ public class TimelineFragment extends Fragment {
                     return;
                 }
                 for (Post post : posts) {
-                    Log.i(TAG, "Post: " + post.getCaption() + ", username: " + post.getOwner().getUsername());
                 }
                 mAdapter.clear();
                 mAdapter.addAll(posts);
