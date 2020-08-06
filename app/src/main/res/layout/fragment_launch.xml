@@ -37,7 +37,8 @@
                 android:layout_margin="8dp"
                 android:ems="10"
                 android:fontFamily="@font/roboto"
-                android:hint="Title" />
+                android:hint="Title"
+                app:errorEnabled="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -68,6 +69,7 @@
                 android:textAlignment="viewEnd"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
+                app:errorEnabled="true"
                 tools:ignore="RtlCompat" />
         </LinearLayout>
 
@@ -86,7 +88,8 @@
                 android:focusableInTouchMode="false"
                 android:fontFamily="@font/roboto"
                 android:hint="select a day"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:errorEnabled="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
@@ -110,7 +113,8 @@
                     android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="start time"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:errorEnabled="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -129,7 +133,8 @@
                     android:focusableInTouchMode="false"
                     android:fontFamily="@font/roboto"
                     android:hint="end time"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    app:errorEnabled="true" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
@@ -173,7 +178,8 @@
                 android:fontFamily="@font/roboto"
                 android:hint="About the meeting.."
                 android:inputType="textPostalAddress"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:errorEnabled="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

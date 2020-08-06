@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_gradient"
     android:visibility="visible">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_gradient"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="8dp"
         tools:context=".Fragments.EditProfileFragment">
@@ -19,20 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:textColor="@android:color/white"
-            android:text="Edit your meeTTime availability:" />
+            android:text="Edit your meeTTime availability. It will be used to determine the best time for you to join meetings."
+            android:textColor="@android:color/white" />
 
-        <TextView
-            android:id="@+id/tvMon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="MON"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:typeface="normal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,6 +30,17 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvMon"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="MON"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etMonStartLayout"
@@ -82,21 +83,23 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvTue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="TUE"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvTue"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="TUE"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etTueStartLayout"
@@ -139,21 +142,24 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvWed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="WED"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvWed"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="WED"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etWedStartLayout"
@@ -196,21 +202,23 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvThu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="THU"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvThu"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="THU"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etThuStartLayout"
@@ -253,21 +261,23 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvFri"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="FRI"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvFri"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="FRI"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etFriStartLayout"
@@ -310,21 +320,23 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvSat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="SAT"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvSat"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="SAT"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etSatStartLayout"
@@ -367,21 +379,23 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvSun"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto"
-            android:text="SUN"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvSun"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:text="SUN"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:typeface="normal" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/etSunStartLayout"
@@ -423,7 +437,6 @@
                     android:visibility="visible" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSave"

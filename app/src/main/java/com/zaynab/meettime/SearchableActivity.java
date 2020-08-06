@@ -8,6 +8,7 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -89,6 +90,9 @@ public class SearchableActivity extends AppCompatActivity {
                 }
                 for (ParseUser usr : users) {
                     Log.i(TAG, " username: " + usr.getUsername());
+                }
+                if (users.size() == 0) {
+                    Toast.makeText(SearchableActivity.this, "No results found!", Toast.LENGTH_SHORT).show();
                 }
                 mAllUsers.addAll(users);
                 mAdapter.notifyDataSetChanged();

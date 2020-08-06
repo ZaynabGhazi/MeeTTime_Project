@@ -42,6 +42,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialStyledDatePickerDialog;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -59,6 +60,7 @@ import java.util.Arrays;
 import dagger.Reusable;
 
 import static android.icu.util.Calendar.*;
+import static android.text.TextUtils.isEmpty;
 import static com.zaynab.meettime.Fragments.EditProfilePictureFragment.PICK_PHOTO_CODE;
 
 /**
@@ -194,11 +196,22 @@ public class LaunchFragment extends Fragment {
                     Toast.makeText(mContext, "Please select a picture for the meeting!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (errorField(mEtTimeStart) || errorField(mEtTimeEnd) || errorField(mEtDate) || errorField(mEtTitle) || errorField(mEtDescription)) {
+                    return;
+                }
                 final Meeting meeting = createMeeting();
                 //ToDo: implement all other features/attributes of a meeting
                 saveAttendance(meeting);
             }
         });
+    }
+
+    private boolean errorField(TextInputEditText text) {
+        if (isEmpty(text.getText().toString())) {
+            text.setError("Field Required to launch event!");
+            return true;
+        }
+        return false;
     }
 
     private void saveAttendance(Meeting meeting) {
