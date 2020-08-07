@@ -122,20 +122,20 @@ public class AvailabilityFragment extends Fragment {
         if (!isEmpty(startTime) && !isEmpty(endTime)) {
             String[] start_fields = startTime.split(" ");
             String[] end_fields = endTime.split(" ");
-            mEtStartMon.setText(start_fields[MONDAY]);
-            mEtEndMon.setText(end_fields[MONDAY]);
-            mEtStartTue.setText(start_fields[TUESDAY]);
-            mEtEndTue.setText(end_fields[TUESDAY]);
-            mEtStartWed.setText(start_fields[WEDNESDAY]);
-            mEtEndWed.setText(end_fields[WEDNESDAY]);
-            mEtStartThu.setText(start_fields[THURSDAY]);
-            mEtEndThu.setText(end_fields[THURSDAY]);
-            mEtStartFri.setText(start_fields[FRIDAY]);
-            mEtEndFri.setText(end_fields[FRIDAY]);
-            mEtStartSat.setText(start_fields[SATURDAY]);
-            mEtEndSat.setText(end_fields[SATURDAY]);
-            mEtStartSun.setText(start_fields[SUNDAY]);
-            mEtEndSun.setText(end_fields[SUNDAY]);
+            mEtStartMon.setText(formatTimeZeros(Integer.parseInt(start_fields[MONDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[MONDAY].split(":")[1])));
+            mEtEndMon.setText(formatTimeZeros(Integer.parseInt(end_fields[MONDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[MONDAY].split(":")[1])));
+            mEtStartTue.setText(formatTimeZeros(Integer.parseInt(start_fields[TUESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[TUESDAY].split(":")[1])));
+            mEtEndTue.setText(formatTimeZeros(Integer.parseInt(end_fields[TUESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[TUESDAY].split(":")[1])));
+            mEtStartWed.setText(formatTimeZeros(Integer.parseInt(start_fields[WEDNESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[WEDNESDAY].split(":")[1])));
+            mEtEndWed.setText(formatTimeZeros(Integer.parseInt(end_fields[WEDNESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[WEDNESDAY].split(":")[1])));
+            mEtStartThu.setText(formatTimeZeros(Integer.parseInt(start_fields[THURSDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[THURSDAY].split(":")[1])));
+            mEtEndThu.setText(formatTimeZeros(Integer.parseInt(end_fields[THURSDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[THURSDAY].split(":")[1])));
+            mEtStartFri.setText(formatTimeZeros(Integer.parseInt(start_fields[FRIDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[FRIDAY].split(":")[1])));
+            mEtEndFri.setText(formatTimeZeros(Integer.parseInt(end_fields[FRIDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[FRIDAY].split(":")[1])));
+            mEtStartSat.setText(formatTimeZeros(Integer.parseInt(start_fields[SATURDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[SATURDAY].split(":")[1])));
+            mEtEndSat.setText(formatTimeZeros(Integer.parseInt(end_fields[SATURDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[SATURDAY].split(":")[1])));
+            mEtStartSun.setText(formatTimeZeros(Integer.parseInt(start_fields[SUNDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[SUNDAY].split(":")[1])));
+            mEtEndSun.setText(formatTimeZeros(Integer.parseInt(end_fields[SUNDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[SUNDAY].split(":")[1])));
         }
 
     }
@@ -145,7 +145,7 @@ public class AvailabilityFragment extends Fragment {
         TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int min) {
-                et.setText(hour + ":" + min);
+                et.setText(formatTimeZeros(hour) + ":" + formatTimeZeros(min));
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -222,6 +222,14 @@ public class AvailabilityFragment extends Fragment {
                     Toast.makeText(getContext(), "Availability updated successfully!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public String formatTimeZeros(int input) {
+        if (input >= 10) {
+            return String.valueOf(input);
+        } else {
+            return "0" + String.valueOf(input);
+        }
     }
 
 }

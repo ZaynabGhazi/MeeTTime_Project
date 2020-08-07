@@ -64,7 +64,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
                 mTvFullName.setText(usr.getString("firstName") + " " + usr.getString("lastName"));
             if (usr.getUsername().equals(ParseUser.getCurrentUser().getUsername()))
                 mBtnAdd.setVisibility(View.GONE);
-
         }
 
 
