@@ -55,7 +55,9 @@ import com.zaynab.meettime.models.UserTime;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 import dagger.Reusable;
 
@@ -163,7 +165,8 @@ public class LaunchFragment extends Fragment {
         TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int min) {
-                et.setText(hour + ":" + min);
+                String time = formatTimeZeros(hour) + ":" + formatTimeZeros(min);
+                et.setText(make12Format(formatTimeZeros(hour) + ":" + formatTimeZeros(min)));
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -217,8 +220,8 @@ public class LaunchFragment extends Fragment {
     private void saveAttendance(Meeting meeting) {
         UserTime attendance = new UserTime();
         attendance.setUser(ParseUser.getCurrentUser());
-        attendance.setAvailabilityStart(mEtTimeStart.getText().toString());
-        attendance.setAvailabilityEnd(mEtTimeEnd.getText().toString());
+        attendance.setAvailabilityStart(make24Format(mEtTimeStart.getText().toString()));
+        attendance.setAvailabilityEnd(make24Format(mEtTimeEnd.getText().toString()));
         attendance.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -328,8 +331,8 @@ public class LaunchFragment extends Fragment {
         meeting.setChair(ParseUser.getCurrentUser());
         meeting.setDescription(mEtDescription.getText().toString());
         //DateTime format: mm/dd/yyyy hh:mm
-        String timeStart = mEtDate.getText().toString() + " " + mEtTimeStart.getText().toString();
-        String timeEnd = mEtDate.getText().toString() + " " + mEtTimeEnd.getText().toString();
+        String timeStart = mEtDate.getText().toString() + " " + make24Format(mEtTimeStart.getText().toString());
+        String timeEnd = mEtDate.getText().toString() + " " + make24Format(mEtTimeEnd.getText().toString());
         meeting.setTimeStart(timeStart);
         meeting.setTimeEnd(timeEnd);
         //save background picture
@@ -387,5 +390,36 @@ public class LaunchFragment extends Fragment {
         });
     }
 
+    public String formatTimeZeros(int input) {
+        if (input >= 10) {
+            return String.valueOf(input);
+        } else {
+            return "0" + String.valueOf(input);
+        }
+    }
+
+    public String make12Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("hh:mm a").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String make24Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("HH:mm").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
 }
