@@ -117,7 +117,8 @@ public class JoinDialogFragment extends DialogFragment {
         TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int min) {
-                et.setText(hour + ":" + min);
+                String time = formatTimeZeros(hour) + ":" + formatTimeZeros(min);
+                et.setText(make12Format(formatTimeZeros(hour) + ":" + formatTimeZeros(min)));
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -152,38 +153,38 @@ public class JoinDialogFragment extends DialogFragment {
             switch (dayOfWeek) {
                 case 1: //SUNDAY
                     Scheduler.Interval hour_sun = Scheduler.suggestBestHour(meeting, start_fields[SUNDAY], end_fields[SUNDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_sun.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_sun.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_sun.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_sun.getEnd()))));
                     break;
                 case 2:
                     Scheduler.Interval hour_mon = Scheduler.suggestBestHour(meeting, start_fields[MONDAY], end_fields[MONDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_mon.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_mon.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_mon.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_mon.getEnd()))));
                     break;
                 case 3:
                     Scheduler.Interval hour_tue = Scheduler.suggestBestHour(meeting, start_fields[TUESDAY], end_fields[TUESDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_tue.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_tue.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_tue.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_tue.getEnd()))));
                     break;
                 case 4:
                     Scheduler.Interval hour_wed = Scheduler.suggestBestHour(meeting, start_fields[WEDNESDAY], end_fields[WEDNESDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_wed.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_wed.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_wed.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_wed.getEnd()))));
                     break;
                 case 5:
                     Scheduler.Interval hour_thu = Scheduler.suggestBestHour(meeting, start_fields[THURSDAY], end_fields[THURSDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_thu.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_thu.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_thu.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_thu.getEnd()))));
                     break;
                 case 6:
                     Scheduler.Interval hour_fri = Scheduler.suggestBestHour(meeting, start_fields[FRIDAY], end_fields[FRIDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_fri.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_fri.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_fri.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_fri.getEnd()))));
                     break;
                 case 7:
                     Scheduler.Interval hour_sat = Scheduler.suggestBestHour(meeting, start_fields[SATURDAY], end_fields[SATURDAY]);
-                    mEtStartTime.setText(formatTime(String.valueOf(hour_sat.getStart())));
-                    mEtEndTime.setText(formatTime(String.valueOf(hour_sat.getEnd())));
+                    mEtStartTime.setText(make12Format(formatTime(String.valueOf(hour_sat.getStart()))));
+                    mEtEndTime.setText(make12Format(formatTime(String.valueOf(hour_sat.getEnd()))));
                     break;
             }//end_switch
         }
@@ -196,8 +197,8 @@ public class JoinDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 try {
-                    overlap[0] = Scheduler.findIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
-                    double overlap_duration = Scheduler.getIntersection(mEtStartTime.getText().toString(), mEtEndTime.getText().toString(), meeting);
+                    overlap[0] = Scheduler.findIntersection(make24Format(mEtStartTime.getText().toString()), make24Format(mEtEndTime.getText().toString()), meeting);
+                    double overlap_duration = Scheduler.getIntersection(make24Format(mEtStartTime.getText().toString()), make24Format(mEtEndTime.getText().toString()), meeting);
                     if (overlap[0] && overlap_duration >= MIN_OVERLAP) {
                         enrollUser(meeting, ParseUser.getCurrentUser());
                     } else {
@@ -216,8 +217,8 @@ public class JoinDialogFragment extends DialogFragment {
                 .stream(500).setEmissionRate(500);
         UserTime attendance = new UserTime();
         attendance.setUser(currentUser);
-        attendance.setAvailabilityStart(mEtStartTime.getText().toString());
-        attendance.setAvailabilityEnd(mEtEndTime.getText().toString());
+        attendance.setAvailabilityStart(make24Format(mEtStartTime.getText().toString()));
+        attendance.setAvailabilityEnd(make24Format(mEtEndTime.getText().toString()));
         attendance.saveInBackground(new SaveCallback() {
             @Override
             public void done(com.parse.ParseException e) {
@@ -299,4 +300,15 @@ public class JoinDialogFragment extends DialogFragment {
         return result;
     }
 
+    public String make24Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("HH:mm").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
