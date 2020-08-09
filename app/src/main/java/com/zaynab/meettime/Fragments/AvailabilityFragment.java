@@ -24,6 +24,9 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.zaynab.meettime.R;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static android.icu.util.Calendar.DAY_OF_MONTH;
 import static android.icu.util.Calendar.HOUR_OF_DAY;
 import static android.icu.util.Calendar.MINUTE;
@@ -122,20 +125,20 @@ public class AvailabilityFragment extends Fragment {
         if (!isEmpty(startTime) && !isEmpty(endTime)) {
             String[] start_fields = startTime.split(" ");
             String[] end_fields = endTime.split(" ");
-            mEtStartMon.setText(formatTimeZeros(Integer.parseInt(start_fields[MONDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[MONDAY].split(":")[1])));
-            mEtEndMon.setText(formatTimeZeros(Integer.parseInt(end_fields[MONDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[MONDAY].split(":")[1])));
-            mEtStartTue.setText(formatTimeZeros(Integer.parseInt(start_fields[TUESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[TUESDAY].split(":")[1])));
-            mEtEndTue.setText(formatTimeZeros(Integer.parseInt(end_fields[TUESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[TUESDAY].split(":")[1])));
-            mEtStartWed.setText(formatTimeZeros(Integer.parseInt(start_fields[WEDNESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[WEDNESDAY].split(":")[1])));
-            mEtEndWed.setText(formatTimeZeros(Integer.parseInt(end_fields[WEDNESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[WEDNESDAY].split(":")[1])));
-            mEtStartThu.setText(formatTimeZeros(Integer.parseInt(start_fields[THURSDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[THURSDAY].split(":")[1])));
-            mEtEndThu.setText(formatTimeZeros(Integer.parseInt(end_fields[THURSDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[THURSDAY].split(":")[1])));
-            mEtStartFri.setText(formatTimeZeros(Integer.parseInt(start_fields[FRIDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[FRIDAY].split(":")[1])));
-            mEtEndFri.setText(formatTimeZeros(Integer.parseInt(end_fields[FRIDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[FRIDAY].split(":")[1])));
-            mEtStartSat.setText(formatTimeZeros(Integer.parseInt(start_fields[SATURDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[SATURDAY].split(":")[1])));
-            mEtEndSat.setText(formatTimeZeros(Integer.parseInt(end_fields[SATURDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[SATURDAY].split(":")[1])));
-            mEtStartSun.setText(formatTimeZeros(Integer.parseInt(start_fields[SUNDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[SUNDAY].split(":")[1])));
-            mEtEndSun.setText(formatTimeZeros(Integer.parseInt(end_fields[SUNDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[SUNDAY].split(":")[1])));
+            mEtStartMon.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[MONDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[MONDAY].split(":")[1]))));
+            mEtEndMon.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[MONDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[MONDAY].split(":")[1]))));
+            mEtStartTue.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[TUESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[TUESDAY].split(":")[1]))));
+            mEtEndTue.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[TUESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[TUESDAY].split(":")[1]))));
+            mEtStartWed.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[WEDNESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[WEDNESDAY].split(":")[1]))));
+            mEtEndWed.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[WEDNESDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[WEDNESDAY].split(":")[1]))));
+            mEtStartThu.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[THURSDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[THURSDAY].split(":")[1]))));
+            mEtEndThu.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[THURSDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[THURSDAY].split(":")[1]))));
+            mEtStartFri.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[FRIDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[FRIDAY].split(":")[1]))));
+            mEtEndFri.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[FRIDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[FRIDAY].split(":")[1]))));
+            mEtStartSat.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[SATURDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[SATURDAY].split(":")[1]))));
+            mEtEndSat.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[SATURDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[SATURDAY].split(":")[1]))));
+            mEtStartSun.setText(make12Format(formatTimeZeros(Integer.parseInt(start_fields[SUNDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(start_fields[SUNDAY].split(":")[1]))));
+            mEtEndSun.setText(make12Format(formatTimeZeros(Integer.parseInt(end_fields[SUNDAY].split(":")[0])) + ":" + formatTimeZeros(Integer.parseInt(end_fields[SUNDAY].split(":")[1]))));
         }
 
     }
@@ -145,7 +148,8 @@ public class AvailabilityFragment extends Fragment {
         TimePickerDialog timePickerDialog = new TimePickerDialog(mContext, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int hour, int min) {
-                et.setText(formatTimeZeros(hour) + ":" + formatTimeZeros(min));
+                String time = formatTimeZeros(hour) + ":" + formatTimeZeros(min);
+                et.setText(make12Format(formatTimeZeros(hour) + ":" + formatTimeZeros(min)));
             }
         }, mHour, mMinute, false);
         timePickerDialog.show();
@@ -190,24 +194,24 @@ public class AvailabilityFragment extends Fragment {
     }
 
     private void saveUpdates() {
-        String sMon = mEtStartMon.getText().toString();
-        String sTue = mEtStartTue.getText().toString();
-        String sWed = mEtStartWed.getText().toString();
-        String sThu = mEtStartThu.getText().toString();
-        String sFri = mEtStartFri.getText().toString();
-        String sSat = mEtStartSat.getText().toString();
-        String sSun = mEtStartSun.getText().toString();
+        String sMon = make24Format(mEtStartMon.getText().toString());
+        String sTue = make24Format(mEtStartTue.getText().toString());
+        String sWed = make24Format(mEtStartWed.getText().toString());
+        String sThu = make24Format(mEtStartThu.getText().toString());
+        String sFri = make24Format(mEtStartFri.getText().toString());
+        String sSat = make24Format(mEtStartSat.getText().toString());
+        String sSun = make24Format(mEtStartSun.getText().toString());
         String startTime = "";
         if (!isEmpty(sMon) && !isEmpty(sTue) && !isEmpty(sWed) && !isEmpty(sThu) && !isEmpty(sFri) && !isEmpty(sSat) && !isEmpty(sSun)) {
             startTime += sMon + " " + sTue + " " + sWed + " " + sThu + " " + sFri + " " + sSat + " " + sSun;
         }
-        String eMon = mEtEndMon.getText().toString();
-        String eTue = mEtEndTue.getText().toString();
-        String eWed = mEtEndWed.getText().toString();
-        String eThu = mEtEndThu.getText().toString();
-        String eFri = mEtEndFri.getText().toString();
-        String eSat = mEtEndSat.getText().toString();
-        String eSun = mEtEndSun.getText().toString();
+        String eMon = make24Format(mEtEndMon.getText().toString());
+        String eTue = make24Format(mEtEndTue.getText().toString());
+        String eWed = make24Format(mEtEndWed.getText().toString());
+        String eThu = make24Format(mEtEndThu.getText().toString());
+        String eFri = make24Format(mEtEndFri.getText().toString());
+        String eSat = make24Format(mEtEndSat.getText().toString());
+        String eSun = make24Format(mEtEndSun.getText().toString());
         String endTime = "";
         if (!isEmpty(eMon) && !isEmpty(eTue) && !isEmpty(eWed) && !isEmpty(eThu) && !isEmpty(eFri) && !isEmpty(eSat) && !isEmpty(eSun)) {
             endTime += eMon + " " + eTue + " " + eWed + " " + eThu + " " + eFri + " " + eSat + " " + eSun;
@@ -230,6 +234,30 @@ public class AvailabilityFragment extends Fragment {
         } else {
             return "0" + String.valueOf(input);
         }
+    }
+
+    public String make12Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("hh:mm a").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public String make24Format(String time) {
+        String result = "";
+        try {
+            final SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+            final Date dateObj = sdf.parse(time);
+            result = new SimpleDateFormat("HH:mm").format(dateObj);
+        } catch (final java.text.ParseException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 }
