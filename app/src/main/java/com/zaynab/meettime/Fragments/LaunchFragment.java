@@ -235,7 +235,6 @@ public class LaunchFragment extends Fragment {
     }
 
     private void saveMeeting(Meeting meeting, UserTime attendance) {
-        makePost(meeting);
         meeting.addAttendanceData(attendance);
         meeting.addUser(ParseUser.getCurrentUser());
         if (mLocation != null) {
@@ -251,8 +250,12 @@ public class LaunchFragment extends Fragment {
                     current.saveInBackground(new SaveCallback() {
                         @Override
                         public void done(ParseException e) {
-                            if (e != null)
+                            if (e != null) {
                                 Log.e(TAG, "Error adding meeting to user object", e);
+                                return;
+                            }
+                            makePost(meeting);
+
                         }
                     });
 
