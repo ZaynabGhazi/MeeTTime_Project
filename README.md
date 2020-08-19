@@ -77,6 +77,6 @@ This application's finality is personal scheduling. Users can launch and join me
 <img src="screens.jpg" width=600>
 
 ## Demo
-<img src="ezgif.com-video-to-gif.gif" width=600>
+[![Watch the video](<img src="loginView.png" >)](https://www.youtube.com/watch?v=WdXDU698gMM)
 
 
