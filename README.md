@@ -77,6 +77,6 @@ This application's finality is personal scheduling. Users can launch and join me
 <img src="screens.jpg" width=600>
 
 ## Demo
-[![Watch the video](<img src="loginView.png" >)](https://www.youtube.com/watch?v=WdXDU698gMM)
+[<img src="loginView.png" width="30%">](https://www.youtube.com/watch?v=WdXDU698gMM)
 
 
